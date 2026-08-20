@@ -195,7 +195,9 @@ def read_deck():
 
 def write_deck(text):
     tmp = DECK + '.tmp'
-    with open(tmp, 'w', encoding='utf-8') as f:
+    # newline='' keeps the file's own line endings — without it Windows turns
+    # every save into a whole-file CRLF rewrite, which buries the real diff.
+    with open(tmp, 'w', encoding='utf-8', newline='') as f:
         f.write(text)
     os.replace(tmp, DECK)
 
