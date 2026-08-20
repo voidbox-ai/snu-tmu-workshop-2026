@@ -337,3 +337,9 @@ hr.rule { border: 0; height: 1px; background: var(--rule); margin: 24px 0; width
 /* tighten the gap between the header and a diagram-only slide */
 .body-area.has-title { padding-top: 122px; }
 .body-area.has-title > .diagram { margin-top: -8px; }
+
+/* company mark on the title slide */
+.logo {
+  width: 216px; height: auto; display: block;
+  margin: 40px auto 0; border: 0; background: none; box-shadow: none;
+}

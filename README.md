@@ -22,6 +22,7 @@ The physical exhibition lived five days; the virtual one is still open.
 | | |
 |---|---|
 | [`deck/`](deck/) | The talk itself — a self-contained reveal.js deck with speaker notes |
+| [`push-to-github.bat`](push-to-github.bat) | Commit and push whatever changed, on Windows |
 | [`presence-before-sync-script.md`](presence-before-sync-script.md) | Reading copy of the script (the deck is the source of truth) |
 
 ## Running the deck
@@ -44,15 +45,16 @@ view and the editing tools need the local server.
 
 ## Published slides
 
-If GitHub Pages is enabled for this repository (Settings → Pages → deploy from
-`main`, root), the deck is readable at:
+**<https://voidbox-ai.github.io/snu-tmu-workshop-2026/>**
 
-```
-https://<account>.github.io/snu-tmu-workshop-2026/
-```
+GitHub Pages serves the `master` branch from the repository root; the root
+redirects to `deck/`. The slides render in full there, and the speaker view
+(`S`) works too — so the URL doubles as a backup if the presenting laptop
+fails, as long as the venue has network.
 
-The slides render there in full. The parts backed by `serve.py` — editing
-speaker notes, dropping in images — are local-only by design.
+Two things are local-only by design, because they need `serve.py` to write
+files: editing speaker notes from the speaker view, and the image drop-in page.
+Both detect that there is no server and step aside quietly.
 
 ---
 
@@ -65,6 +67,7 @@ reveal.js와 Pretendard를 함께 커밋해두어 **인터넷 없이 동작**합
 - 단축키: `S` 발표자 화면 · `T` 타이머 · `I` 노트 · `B` 블랙아웃 · `?` 도움말
 - 대본은 발표자 화면에서 직접 고치고 저장할 수 있습니다 (`index.html`에 기록됨)
 - 이미지는 `deck/images.html` 에서 끌어다 놓으면 됩니다
+- 작업한 내용은 `push-to-github.bat` 더블클릭으로 커밋·push (`master` 브랜치)
 
 자세한 사용법은 [`deck/README.md`](deck/README.md).
 

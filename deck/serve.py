@@ -89,6 +89,9 @@ def sniff_image(blob):
         return 'AVIF'
     if blob[4:8] == b'ftyp' and blob[8:12] in (b'heic', b'heix', b'mif1'):
         return None  # HEIC — Chrome will not display it
+    head = blob[:400].lstrip()
+    if head.startswith(b'<svg') or (head.startswith(b'<?xml') and b'<svg' in blob[:400]):
+        return 'SVG'
     return None
 
 
@@ -116,7 +119,7 @@ def list_slots():
         if os.path.exists(path):
             st = os.stat(path)
             with open(path, 'rb') as f:
-                kind = sniff_image(f.read(16))
+                kind = sniff_image(f.read(512))
             entry['bytes'] = st.st_size
             entry['mtime'] = int(st.st_mtime * 1000)
             entry['format'] = kind or 'unknown'
@@ -152,7 +155,7 @@ def list_pool():
             continue
         st = os.stat(path)
         with open(path, 'rb') as f:
-            kind = sniff_image(f.read(16))
+            kind = sniff_image(f.read(512))
         out.append({
             'filename': fn,
             'url': 'assets/_pool/' + fn,
@@ -314,7 +317,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 if not os.path.exists(src):
                     raise ValueError('%s is no longer in the pool' % data['pool'])
                 with open(src, 'rb') as f:
-                    kind = sniff_image(f.read(16))
+                    kind = sniff_image(f.read(512))
                 if kind is None:
                     raise ValueError(
                         '%s is not a format browsers display — export it as JPEG first'

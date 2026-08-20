@@ -846,6 +846,21 @@
 					} );
 				}
 
+				/** Hide the Edit button when no save endpoint is reachable, so a
+				 *  statically hosted copy of the deck offers only what it can do. */
+				function detectSaveEndpoint() {
+					fetch( 'api/notes', { method: 'HEAD' } )
+						.then( function ( r ) { if ( !r.ok ) throw 0; } )
+						.catch( function () {
+							fetch( '/api/notes' )
+								.then( function ( r ) { if ( !r.ok ) throw 0; } )
+								.catch( function () {
+									noteEditBtn.style.display = 'none';
+									closeNoteEditor();
+								} );
+						} );
+				}
+
 				function setupNoteEditor() {
 					noteEditor   = document.querySelector( '.note-editor' );
 					noteTextarea = noteEditor.querySelector( 'textarea' );
@@ -872,6 +887,8 @@
 					} );
 					noteTextarea.addEventListener( 'keypress', function ( e ) { e.stopPropagation(); } );
 					noteTextarea.addEventListener( 'keyup', function ( e ) { e.stopPropagation(); } );
+
+					detectSaveEndpoint();
 				}
 
 				/**
