@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presence Before Synchronization — voidbox</title>
+
+<link rel="stylesheet" href="reveal/reset.css">
+<link rel="stylesheet" href="reveal/reveal.css">
+<link rel="stylesheet" href="reveal/theme/white.css" id="theme">
+<link rel="stylesheet" href="css/deck.css">
+</head>
+
+<body data-sections='{"Background": "Background", "Yonsei": "Case 1 — one exhibition, run in two places at once", "Findings": "What failed, what survived, and what we take from it", "Munsan": "Case 2 — the same scan, a different user", "Next": "Next"}'>
+
+<div class="reveal">
+<div class="slides">
+
+<!-- ==========================================================
+     BACKGROUND — 2:00
+     ========================================================== -->
+
+<!-- 1 · 0:10 -->
+<section data-sec="Background" data-dur="10" data-notopbar>
+  <div class="center-stack">
+    <h1 class="t-title">Presence Before Synchronization</h1>
+    <p class="t-sub" style="margin-top:20px;">Rethinking Digital Twins for Community Rebuilding</p>
+    <hr class="rule" style="width:180px;margin:34px auto;">
+    <p class="t-note" style="font-style:normal;">
+      <strong style="font-weight:600;">Hyeogjin Noh</strong> &nbsp;·&nbsp; voidbox<br>
+      <span class="faint">SNU × TMU Annual Workshop &nbsp;·&nbsp; 2026</span>
+    </p>
+  </div>
+  <aside class="notes">
+    <p>Good morning. I'm Hyeogjin Noh, from a company called voidbox. We build 3D scanning and spatial software for architecture.</p>
+    <p>I want to walk through two projects we ran this year, and be honest about which parts worked.</p>
+    <span class="cue">[가볍게. 선언하지 말고 소개하듯이.]</span>
+  </aside>
+</section>
+
+<!-- 2 · 0:35 -->
+<section data-sec="Background" data-dur="35" data-title="What we do, and the question behind it">
+  <div class="body-area has-title">
+    <div class="split">
+      <div class="media">
+        <img data-slot="assets/empty-hall.jpg"
+             data-desc="철거 후 빈 전시장 로비 / 또는 문산초 외관"
+             src="assets/empty-hall.jpg" alt="">
+        <p class="cap">The Yonsei exhibition hall, after the exhibition.</p>
+      </div>
+      <div class="body">
+        <p class="t-body-lg" style="margin-bottom:22px;">
+          We scan buildings and places with 3D Gaussian Splatting, and turn them into
+          spaces people can walk through online.
+        </p>
+        <hr class="rule" style="margin:20px 0;">
+        <p class="pull plain">
+          A graduation exhibition lasts five days. A school gets remodelled.
+          A neighbourhood is redeveloped.
+        </p>
+        <p class="t-body" style="margin-top:20px;">
+          The digital twin is offered as the way to keep such places. But keep
+          <strong>what</strong> about them — the space, or what happened in it?
+        </p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>First, what we actually do. We scan buildings and places using 3D Gaussian Splatting, and turn them into spaces you can walk through in a browser.</p>
+    <p>The reason this matters here: in Korea, places disappear constantly. A graduation exhibition lasts five days. A school gets remodelled. A neighbourhood is redeveloped. The digital twin is usually offered as the way to keep them.</p>
+    <p>But keep what about them? The space, or what happened in it? That is the question these two projects were really about.</p>
+    <span class="cue">[35초. 설명하듯 담담하게.]</span>
+  </aside>
+</section>
+
+<!-- 3 · 0:45 -->
+<section data-sec="Background" data-dur="45" data-title="How 3D Gaussian Splatting works" data-sub="space from many acts of looking, not from one construction">
+  <div class="body-area has-title">
+    <div class="strip" style="margin-bottom:20px;">
+      <div class="col">
+        <img data-slot="assets/alberti.jpg" data-desc="알베르티 원근법 작도, 1435" src="assets/alberti.jpg" alt="">
+        <p class="lab">Alberti <i>· 1435 · one fixed point</i></p>
+      </div>
+      <div class="col">
+        <img data-slot="assets/cezanne.jpg" data-desc="Cézanne, Mont Sainte-Victoire" src="assets/cezanne.jpg" alt="">
+        <p class="lab">Cézanne <i>· 1900s · many separate glances</i></p>
+      </div>
+      <div class="col">
+        <img data-slot="assets/scan-lake.jpg" data-desc="voidbox 3DGS 스캔 (호수/저수지 프레임)" src="assets/scan-lake.jpg" alt="">
+        <p class="lab">3DGS <i>· 2023 · thousands of them, optimized</i></p>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <svg viewBox="0 0 1200 340" xmlns="http://www.w3.org/2000/svg" role="img"
+           aria-label="3D Gaussian Splatting pipeline">
+        <defs>
+          <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#111110"/>
+          </marker>
+          <marker id="aha" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#2a78d6"/>
+          </marker>
+        </defs>
+
+        <text x="185" y="26" class="svg-label" text-anchor="middle">Photographs</text>
+        <text x="185" y="52" class="svg-label-sm" text-anchor="middle">+ estimated camera poses</text>
+        <path d="M 95 185 C 130 110 235 100 285 160" class="svg-stroke-dim" stroke-dasharray="5 6"/>
+        <path d="M 88 192 L 102 192 L 95 179 Z" class="svg-fill"/>
+        <path d="M 133 142 L 147 142 L 140 129 Z" class="svg-fill"/>
+        <path d="M 185 113 L 199 113 L 192 100 Z" class="svg-fill"/>
+        <path d="M 236 122 L 250 122 L 243 109 Z" class="svg-fill"/>
+        <path d="M 274 162 L 288 162 L 281 149 Z" class="svg-fill"/>
+        <text x="185" y="232" class="svg-label-xs" text-anchor="middle">the path you walk while filming</text>
+
+        <path d="M 340 145 L 465 145" class="svg-stroke" marker-end="url(#ah)"/>
+
+        <text x="600" y="26" class="svg-label" text-anchor="middle">Millions of 3D Gaussians</text>
+        <text x="600" y="52" class="svg-label-sm" text-anchor="middle">position · shape · opacity · colour</text>
+        <g>
+          <ellipse cx="556" cy="118" rx="26" ry="12" transform="rotate(-25 556 118)" class="svg-fill-dim"/>
+          <ellipse cx="602" cy="103" rx="30" ry="13" transform="rotate(10 602 103)" class="svg-stroke"/>
+          <ellipse cx="648" cy="123" rx="24" ry="11" transform="rotate(-15 648 123)" class="svg-fill-dim"/>
+          <ellipse cx="540" cy="152" rx="20" ry="9"  transform="rotate(30 540 152)" class="svg-stroke"/>
+          <ellipse cx="572" cy="156" rx="32" ry="14" transform="rotate(5 572 156)" class="svg-fill-dim"/>
+          <ellipse cx="618" cy="148" rx="27" ry="12" transform="rotate(-30 618 148)" class="svg-stroke"/>
+          <ellipse cx="666" cy="138" rx="18" ry="8"  transform="rotate(-20 666 138)" class="svg-fill-dim"/>
+          <ellipse cx="586" cy="188" rx="29" ry="13" transform="rotate(-10 586 188)" class="svg-stroke"/>
+          <ellipse cx="634" cy="184" rx="25" ry="11" transform="rotate(15 634 184)" class="svg-fill-dim"/>
+          <ellipse cx="663" cy="172" rx="17" ry="8"  transform="rotate(25 663 172)" class="svg-stroke"/>
+        </g>
+        <text x="600" y="232" class="svg-label-xs" text-anchor="middle">no mesh, no surfaces — only translucent ellipsoids</text>
+
+        <path d="M 745 145 L 900 145" class="svg-stroke" marker-end="url(#ah)"/>
+
+        <text x="1010" y="26" class="svg-label" text-anchor="middle">Compare &amp; adjust</text>
+        <text x="1010" y="52" class="svg-label-sm" text-anchor="middle">render → difference → gradient</text>
+        <rect x="948" y="98" width="96" height="66" class="svg-stroke"/>
+        <rect x="988" y="132" width="96" height="66" class="svg-stroke-dim"/>
+        <text x="1010" y="232" class="svg-label-xs" text-anchor="middle">render vs. the real photograph</text>
+
+        <path d="M 1005 214 C 1005 278 850 292 700 292 C 645 292 618 258 610 208"
+              class="svg-stroke-acc" stroke-dasharray="6 7" marker-end="url(#aha)"/>
+        <text x="812" y="324" class="svg-label-xs" text-anchor="middle" style="fill:#2a78d6">
+          repeat — tens of thousands of iterations
+        </text>
+      </svg>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Very briefly, how the technology works — because one property of it drives everything that follows.</p>
+    <p>Alberti gave European painting a space constructed from a single fixed point. Cézanne stopped obeying that, and built his mountain out of many separate glances held on one canvas. 3DGS does something close to the second: it optimises a space out of thousands of them.</p>
+    <p>Concretely: you walk through a space with a camera. Structure-from-motion estimates where each photograph was taken. The system then fits a cloud of translucent ellipsoids — Gaussians — each with a position, a shape, an opacity, and a colour that changes with viewing direction. It renders that cloud from a known camera, compares it to the real photograph, and adjusts. Tens of thousands of times.</p>
+    <p>Note what is absent. No mesh. No surfaces. No geometry. It reconstructs how a place looks, not what it is made of.</p>
+    <span class="cue">[45초. 유일한 기술 설명. 빠르게 지나가되 마지막 문장은 또렷하게.]</span>
+  </aside>
+</section>
+
+<!-- 4 · 0:30 -->
+<section data-sec="Background" data-dur="30" data-title="One assumption, and what it costs">
+  <div class="body-area has-title">
+    <div class="split">
+      <div class="media">
+        <img data-slot="assets/playground.jpg"
+             data-desc="놀이터 3DGS 스캔 — 번진 인물이 보이는 프레임"
+             src="assets/playground.jpg" alt="">
+        <p class="cap">A playground we scanned. Everything is sharp except the person walking through it.</p>
+      </div>
+      <div class="body">
+        <p class="pull" style="margin-bottom:24px;">
+          The optimization assumes the scene did not change while you were photographing it.
+        </p>
+        <ul class="plain">
+          <li>Anything that moved is not reconstructed as an object — it is baked in as a smear.</li>
+          <li>What survives is <strong>that he was there</strong>. What is lost is <strong>where he was</strong>.</li>
+          <li>So the medium is good at space <strong>on the condition that events are excluded</strong>.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>All of it rests on one assumption: that the scene did not change while you were photographing it.</p>
+    <p>Here is a playground we scanned. Everything is sharp — the slide, the railing, the paving. Except this. That is a person who walked while we were filming. He broke the assumption, so he was not reconstructed as an object; he was baked into the scene as a smear. What survives is that he was there. What is lost is where he was.</p>
+    <p>So this medium is good at space on the condition that events are excluded. And a community is not geometry — geometry is only the substrate it sits on. What makes it a community is a second layer laid over the physical one: the events. People meeting, someone presenting, someone stopping in front of a drawing for five minutes.</p>
+    <p>Which gave us a straightforward thing to test: can we add that layer back on top? That is what the first project was.</p>
+    <span class="cue">[30초. 두 사례의 출발점 — 하지만 극적으로 몰지 말 것.]</span>
+  </aside>
+</section>
+
+<!-- ==========================================================
+     CASE 1 — YONSEI · 2:30
+     ========================================================== -->
+
+<!-- 5 · 0:40 -->
+<section data-sec="Yonsei" data-dur="40" data-title="Yonsei University, Dept. of Architectural Engineering" data-sub="Graduation Exhibition 2026">
+  <div class="body-area has-title">
+    <div class="duo" style="margin-bottom:24px;">
+      <div class="col">
+        <img data-slot="assets/yonsei-physical.jpg" data-desc="연세대 졸업전시 물리 전시장 사진" src="assets/yonsei-physical.jpg" alt="">
+        <p class="cap"><b>Physical</b> — June 4–8, 2026 · five days</p>
+      </div>
+      <div class="col">
+        <img data-slot="assets/yonsei-virtual.jpg" data-desc="온라인 전시 스크린샷 (스캔된 전시장)" src="assets/yonsei-virtual.jpg" alt="">
+        <p class="cap"><b class="acc">Virtual</b> — opened June 5, 2026 · <span class="acc">still open today</span></p>
+      </div>
+    </div>
+    <p class="t-body">
+      A partnership between the department and voidbox: run one graduation exhibition
+      in two places at once, and see whether the two could behave as a single event.
+    </p>
+  </div>
+  <aside class="notes">
+    <p>The first project. Earlier this year we signed an agreement with the Department of Architectural Engineering at Yonsei University to run their graduation exhibition in two places at once.</p>
+    <p>The physical exhibition ran five days, June 4th to 8th. We scanned the hall, and the virtual exhibition opened on June 5th — one day later.</p>
+    <p>It is still open. I'll come back to that.</p>
+    <span class="cue">["still open"은 가볍게 표시만 하고 넘어갈 것 — 나중에 회수.]</span>
+  </aside>
+</section>
+
+<!-- 6 · 0:40 -->
+<section data-sec="Yonsei" data-dur="40" data-title="The scan, and the exhibition placed inside it">
+  <div class="body-area has-title">
+    <div class="split">
+      <div class="media">
+        <img data-slot="assets/tool-curation.jpg" data-desc="카드 배치 / 큐레이션 툴 화면" src="assets/tool-curation.jpg" alt="">
+        <p class="cap">The curation tool — works positioned inside the scanned hall.</p>
+      </div>
+      <div class="body">
+        <ul class="plain">
+          <li>We scanned the exhibition hall before installation.</li>
+          <li>A <strong>curation tool</strong> let the department place each student's work into the scanned space, from a plan view.</li>
+          <li>An <strong>archive site</strong> wrapped it: navigation, notices, and a page per work.</li>
+        </ul>
+        <hr class="rule">
+        <p class="t-cap">
+          So the virtual exhibition was not a video or a photo gallery. It was the hall
+          itself, with the show installed in it.
+        </p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Here is what that actually involved. We scanned the hall before installation. Then we built a curation tool so the department could position each student's work inside the scanned space, working from a plan view — that is what you're looking at.</p>
+    <p>Around it we built the archive site: navigation, notices, a page for each work.</p>
+    <p>The point being that the virtual exhibition was not a video or a photo gallery. It was the hall itself, with the show installed in it.</p>
+    <span class="cue">[40초. 툴 화면을 손으로 짚으면서.]</span>
+  </aside>
+</section>
+
+<!-- 7 · 0:40 -->
+<section data-sec="Yonsei" data-dur="40" data-title="And then the layer we cared most about">
+  <div class="body-area has-title">
+    <div class="split">
+      <div class="media">
+        <img data-slot="assets/archive-site.jpg" data-desc="아카이브 사이트 / 댓글·동기화 레이어 화면" src="assets/archive-site.jpg" alt="">
+        <p class="cap">The interaction layer, as designed.</p>
+      </div>
+      <div class="body">
+        <p class="pull" style="margin-bottom:22px;">
+          An interaction layer — comments, and two-way sync between the physical and
+          the virtual exhibition.
+        </p>
+        <p class="t-body">
+          Something happening in the hall should change the virtual exhibition.
+          Something happening in the virtual exhibition should change the hall.
+        </p>
+        <hr class="rule">
+        <p class="t-cap">
+          This is where most of our design effort went. It is the second layer — our
+          attempt to lay events back over the geometry.
+        </p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>And then the part we cared most about: an interaction layer. Comments, and a two-way sync between the physical and the virtual exhibition.</p>
+    <p>The idea was that something happening in the hall should change the virtual exhibition, and something happening in the virtual exhibition should change the hall.</p>
+    <p>This is where most of our design effort went. It is the second layer — our attempt to lay events back over the geometry.</p>
+    <span class="cue">[40초.]</span>
+  </aside>
+</section>
+
+<!-- 8 · 0:30 -->
+<section data-sec="Yonsei" data-dur="30" data-title="The hypothesis" data-sub="what we were actually testing">
+  <div class="body-area has-title">
+    <div class="diagram">
+      <svg viewBox="0 0 1200 250" xmlns="http://www.w3.org/2000/svg" role="img"
+           aria-label="Metaverse, digital twin and space sync compared">
+        <defs>
+          <marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#111110"/>
+          </marker>
+          <marker id="ah2a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#2a78d6"/>
+          </marker>
+        </defs>
+
+        <rect x="872" y="0" width="256" height="248" class="svg-fill-wash" rx="3"/>
+
+        <text x="200" y="24" class="svg-label" text-anchor="middle">Metaverse</text>
+        <text x="200" y="50" class="svg-label-sm" text-anchor="middle" font-style="italic">an alternative space</text>
+        <circle cx="128" cy="140" r="48" class="svg-stroke"/>
+        <circle cx="272" cy="140" r="48" class="svg-stroke"/>
+        <text x="128" y="146" class="svg-label-xs" text-anchor="middle">REAL</text>
+        <text x="272" y="146" class="svg-label-xs" text-anchor="middle">VIRTUAL</text>
+        <line x1="194" y1="122" x2="194" y2="158" class="svg-stroke"/>
+        <line x1="206" y1="122" x2="206" y2="158" class="svg-stroke"/>
+        <text x="200" y="228" class="svg-label-sm" text-anchor="middle">no coupling</text>
+
+        <text x="600" y="24" class="svg-label" text-anchor="middle">Digital twin</text>
+        <text x="600" y="50" class="svg-label-sm" text-anchor="middle" font-style="italic">a mirror space</text>
+        <circle cx="528" cy="140" r="48" class="svg-stroke"/>
+        <circle cx="672" cy="140" r="48" class="svg-stroke"/>
+        <text x="528" y="146" class="svg-label-xs" text-anchor="middle">REAL</text>
+        <text x="672" y="146" class="svg-label-xs" text-anchor="middle">VIRTUAL</text>
+        <line x1="581" y1="140" x2="616" y2="140" class="svg-stroke" marker-end="url(#ah2)"/>
+        <text x="600" y="228" class="svg-label-sm" text-anchor="middle">one direction</text>
+
+        <text x="1000" y="24" class="svg-label-acc" text-anchor="middle">Space Sync</text>
+        <text x="1000" y="50" class="svg-label-sm" text-anchor="middle" font-style="italic">causal coupling</text>
+        <circle cx="928" cy="140" r="48" class="svg-stroke-acc"/>
+        <circle cx="1072" cy="140" r="48" class="svg-stroke-acc"/>
+        <text x="928" y="146" class="svg-label-xs" text-anchor="middle">REAL</text>
+        <text x="1072" y="146" class="svg-label-xs" text-anchor="middle">VIRTUAL</text>
+        <line x1="981" y1="128" x2="1016" y2="128" class="svg-stroke-acc" marker-end="url(#ah2a)"/>
+        <line x1="1016" y1="154" x2="981" y2="154" class="svg-stroke-acc" marker-end="url(#ah2a)"/>
+        <text x="1000" y="228" class="svg-label-sm" text-anchor="middle" style="fill:#2a78d6">both directions</text>
+      </svg>
+      <p class="cap" style="margin-top:16px;">
+        If the two spaces act on each other they become one event; if they become one
+        event, the online and offline participants become one community.
+        <b>That was the bet.</b>
+      </p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>To place it against the two things it usually gets confused with. A metaverse is an alternative space — parallel to the real one, not touching it. A digital twin is a mirror space — the real world writes into the virtual one, one direction only.</p>
+    <p>What we wanted was the third: causal coupling, both directions. The reasoning was that if the two spaces act on each other they become one event, and if they become one event, the people online and the people in the room become one community.</p>
+    <p>That was the bet.</p>
+    <span class="cue">[30초. 다이어그램은 15초면 충분.]</span>
+  </aside>
+</section>
+
+<!-- ==========================================================
+     FINDINGS · 4:45
+     ========================================================== -->
+
+<!-- 9 · 0:40 -->
+<section data-sec="Findings" data-dur="40" data-title="What the interaction layer actually did" data-sub="five days, one department, one graduating class">
+  <div class="body-area has-title">
+    <div class="stats wide">
+      <div class="stat">
+        <div class="v">9</div>
+        <div class="k">comments</div>
+      </div>
+      <div class="stat">
+        <div class="v">2</div>
+        <div class="k">syncs<br><b>physical → virtual</b></div>
+      </div>
+      <div class="stat">
+        <div class="v">0</div>
+        <div class="k">syncs<br><b>virtual → physical</b></div>
+      </div>
+    </div>
+    <hr class="rule" style="margin-top:38px;">
+    <p class="t-body">Eleven interactions in total.</p>
+  </div>
+  <aside class="notes">
+    <p>So — what did that layer actually do. Nine comments. Two syncs from the physical side to the virtual one. Zero from the virtual side to the physical one. Eleven interactions in total, over five days, across an entire graduating class.</p>
+    <span class="cue">[숫자를 담담하게 읽을 것. 자조하거나 극적으로 만들지 말 것 — 결과 보고하듯.]</span>
+  </aside>
+</section>
+
+<!-- 10 · 1:20 -->
+<section data-sec="Findings" data-dur="80" data-title="Reading that honestly">
+  <div class="body-area has-title">
+    <ul class="plain">
+      <li>The coupling we designed was bidirectional. In practice <strong>one of the two directions never ran at all</strong> — the virtual exhibition could only watch.</li>
+      <li>The second layer never formed. We laid it over the geometry and it did not take.</li>
+      <li><strong>Limitation.</strong> This says our interaction layer was not used. It does not show that interaction is impossible — one event, five days, one department, no control condition.</li>
+    </ul>
+    <hr class="rule" style="margin-top:30px;">
+    <p class="pull plain">
+      At some point we stopped asking why people didn't use what we built,
+      and started asking what they did instead.
+    </p>
+  </div>
+  <aside class="notes">
+    <p>A few things worth saying about that.</p>
+    <p>First, the asymmetry. Two events crossed from the physical side into the virtual one; zero crossed the other way. The coupling we designed was bidirectional, and in practice one of the two directions never ran at all. The virtual exhibition was never able to act on the physical one — it could only watch.</p>
+    <p>Second, plainly: the second layer never formed. We laid it over the geometry and it did not take.</p>
+    <p>Third, the limitation, because I want to be accurate in this room. This tells you that <em>our</em> interaction layer was not used. It does not show that interaction is impossible. One event, five days, one department, and no control condition.</p>
+    <p>But at some point we stopped asking why people didn't use what we had built, and started asking what they did instead.</p>
+    <span class="cue">[80초. 여기가 전환점. 마지막 문장에서 톤을 올릴 것.]</span>
+  </aside>
+</section>
+
+<!-- 11 · 0:50 -->
+<section data-sec="Findings" data-dur="50" data-title="What they did instead" data-sub="June 5 – August 20, 2026">
+  <div class="body-area has-title">
+    <div class="stats wide">
+      <div class="stat on">
+        <div class="v">813</div>
+        <div class="k">unique visitors</div>
+      </div>
+      <div class="stat on">
+        <div class="v">5,397</div>
+        <div class="k">page views</div>
+      </div>
+      <div class="stat on">
+        <div class="v sm">6.6</div>
+        <div class="k">pages per visit<br><b>— not a bounce</b></div>
+      </div>
+    </div>
+    <hr class="rule" style="margin-top:38px;">
+    <p class="t-body">
+      No interaction feature was involved in any of this. People arrived, and walked around.
+    </p>
+  </div>
+  <aside class="notes">
+    <p>Eight hundred and thirteen unique visitors. Five thousand three hundred and ninety-seven page views. Six point six pages per visit.</p>
+    <p>Six point six is the number I'd point at. That is not a bounce — people arrived and then walked around inside the space for a while.</p>
+    <p>And no interaction feature was involved in any of it.</p>
+    <span class="cue">[50초.]</span>
+  </aside>
+</section>
+
+<!-- 12 · 1:00 -->
+<section data-sec="Findings" data-dur="60" data-title="How long each exhibition lived">
+  <div class="body-area has-title">
+    <div class="diagram">
+      <svg viewBox="0 0 1200 290" xmlns="http://www.w3.org/2000/svg" role="img"
+           aria-label="The physical exhibition lasted 5 days; the virtual exhibition has been open 77 days and counting">
+        <defs>
+          <marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#2a78d6"/>
+          </marker>
+        </defs>
+
+        <text x="120" y="28" class="svg-label-sm">Physical exhibition</text>
+        <rect x="120" y="40" width="52" height="34" rx="3" class="svg-fill-dim"/>
+        <text x="186" y="66" class="svg-label">5 days</text>
+
+        <text x="133" y="106" class="svg-label-sm">Virtual exhibition</text>
+        <text x="1107" y="106" class="svg-label-acc" text-anchor="end" style="font-size:26px">15× longer</text>
+        <rect x="133" y="118" width="974" height="34" rx="3" class="svg-fill-acc"/>
+        <path d="M 1114 135 L 1152 135" class="svg-stroke-acc" marker-end="url(#ah3)"/>
+        <text x="150" y="142" class="svg-label" style="fill:#ffffff">77 days — and counting</text>
+
+        <rect x="133" y="172" width="974" height="52" fill="none" stroke="#d5d4cd" stroke-width="1" stroke-dasharray="4 6" rx="3"/>
+        <text x="620" y="203" class="svg-label-xs" text-anchor="middle">daily unique visitors — pending DB export</text>
+
+        <line x1="120" y1="246" x2="1120" y2="246" class="svg-stroke-dim"/>
+        <line x1="120" y1="246" x2="120" y2="255" class="svg-stroke-dim"/>
+        <line x1="466" y1="246" x2="466" y2="255" class="svg-stroke-dim"/>
+        <line x1="864" y1="246" x2="864" y2="255" class="svg-stroke-dim"/>
+        <line x1="1107" y1="246" x2="1107" y2="255" class="svg-stroke-dim"/>
+        <text x="120"  y="276" class="svg-label-xs" text-anchor="start">Jun 4</text>
+        <text x="466"  y="276" class="svg-label-xs" text-anchor="middle">Jul 1</text>
+        <text x="864"  y="276" class="svg-label-xs" text-anchor="middle">Aug 1</text>
+        <text x="1107" y="276" class="svg-label-xs" text-anchor="end">today</text>
+      </svg>
+      <p class="cap" style="margin-top:14px;">
+        The physical exhibition was dismantled in June. The virtual one is open right now.
+      </p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Here is the same project drawn against time, at real scale.</p>
+    <p>The physical exhibition is this. Five days. The virtual one is this — seventy-seven days, and counting. Fifteen times longer.</p>
+    <p>The hall was dismantled in June. The virtual exhibition is open right now, while I'm standing here.</p>
+    <span class="cue">[60초. 이 발표에서 가장 강한 슬라이드. 여유를 둘 것.]</span>
+  </aside>
+</section>
+
+<!-- 13 · 0:40 -->
+<section data-sec="Findings" data-dur="40" data-title="Why it held">
+  <div class="body-area has-title">
+    <p class="pull" style="margin-bottom:26px;">
+      The scan was good enough that going there counted as having gone.
+    </p>
+    <p class="t-body-lg" style="margin-bottom:18px;">
+      The feedback came back repeatedly as some version of the same sentence:
+      <em>this is close enough that I don't feel I missed it.</em>
+    </p>
+    <hr class="rule">
+    <p class="t-body">
+      Scan quality was the thing we treated as a technical baseline rather than as the
+      product. It turned out to be the product.
+    </p>
+  </div>
+  <aside class="notes">
+    <p>Why did it hold? Not because of anything in the interaction layer — that, as we established, ran eleven times.</p>
+    <p>The feedback came back repeatedly as some version of the same sentence: this is close enough that I don't feel I missed it.</p>
+    <p>Scan quality was the thing we treated as a technical baseline, not as the product. It turned out to be the product.</p>
+    <span class="cue">[40초. 담담하게.]</span>
+  </aside>
+</section>
+
+<!-- 14 · 1:15 -->
+<section data-sec="Findings" data-dur="75" data-title="Three findings">
+  <div class="body-area has-title">
+    <div class="lessons">
+      <div class="lesson">
+        <div class="n">01</div>
+        <div>
+          <p class="h">Presence before synchronization.</p>
+          <p class="d">We optimized the coupling. What carried the project was the fidelity of simply being there.</p>
+        </div>
+      </div>
+      <div class="lesson">
+        <div class="n">02</div>
+        <div>
+          <p class="h">We measured the wrong thing.</p>
+          <p class="d">We built metrics for interaction; the metric that mattered was how long the space stayed open. Note the asymmetry — we know the virtual attendance exactly (813) and have no idea what the physical attendance was. We never counted.</p>
+        </div>
+      </div>
+      <div class="lesson">
+        <div class="n">03</div>
+        <div>
+          <p class="h">Not simultaneity, but asynchrony.</p>
+          <p class="d">Nobody wanted to be in two places at once. They wanted to be in one place, later.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Three findings from this.</p>
+    <p>One. Presence before synchronization. We spent our design effort on the coupling; what carried the project was the fidelity of simply being there.</p>
+    <p>Two. We measured the wrong thing. We built metrics for interaction — the metric that mattered was how long the space stayed open. And here is the sharp version: I can tell you exactly how many people visited the virtual exhibition. Eight hundred and thirteen. I cannot tell you how many visited the physical one. We never counted. That asymmetry is what a digital twin actually gives you — it makes presence countable. It is also the trap, because it is precisely what was countable that we optimised for.</p>
+    <p>Three. Not simultaneity, but asynchrony. Nobody wanted to be in two places at once; they wanted to be in one place, later. What joined the online and offline participants was not shared time. It was a shared place that stayed open.</p>
+    <span class="cue">[75초. 2번에 시간을 더 쓸 것.]</span>
+  </aside>
+</section>
+
+<!-- ==========================================================
+     CASE 2 — MUNSAN · 2:45
+     ========================================================== -->
+
+<!-- 15 · 0:45 -->
+<section data-sec="Munsan" data-dur="45" data-title="Munsan Elementary School" data-sub="Seocheon-gun, Chungcheongnam-do">
+  <div class="body-area has-title">
+    <div class="split">
+      <div class="media">
+        <img data-slot="assets/munsan-scan.jpg" data-desc="문산초등학교 3DGS 스캔 화면" src="assets/munsan-scan.jpg" alt="">
+        <p class="cap">The school as it currently stands, scanned.</p>
+      </div>
+      <div class="body">
+        <p class="pull plain" style="margin-bottom:20px;">
+          If what we actually deliver is presence — who else needs it?
+        </p>
+        <ul class="plain">
+          <li>A rural county losing population.</li>
+          <li>A small elementary school to be converted and extended as a <strong>special-education school</strong>.</li>
+          <li>An open design competition, which we entered.</li>
+        </ul>
+        <hr class="rule">
+        <p class="t-cap">Not a community case study — this is what we did with the finding.</p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Which led to a different question. If what we actually deliver is presence, who else needs it? Our answer, for now, is not an audience.</p>
+    <p>This is Munsan Elementary School, in Seocheon county, Chungcheongnam province — a rural region losing population, like most rural regions in Korea. The school is to be converted and extended into a special-education school, and there was an open design competition. We entered it.</p>
+    <p>I should be honest about what this second case is. It is not a community case study. It is what we did with the finding from the first one.</p>
+    <span class="cue">[45초. 정직하게 말하는 문장이 오히려 신뢰를 얻는다.]</span>
+  </aside>
+</section>
+
+<!-- 16 · 0:40 -->
+<section data-sec="Munsan" data-dur="40" data-title="Use 1 — existing-condition survey">
+  <div class="body-area has-title">
+    <div class="split">
+      <div class="media">
+        <img data-slot="assets/munsan-pointcloud.jpg" data-desc="추출된 저밀도 포인트클라우드 / 실측 화면" src="assets/munsan-pointcloud.jpg" alt="">
+        <p class="cap">Low-density point cloud, extracted alongside the Gaussians.</p>
+      </div>
+      <div class="body">
+        <ul class="plain">
+          <li>A school built decades ago; the drawings are old and incomplete.</li>
+          <li>The scan stands in for going out and measuring it.</li>
+          <li>Gaussians are appearance, not geometry — so we extract a <strong>low-density point cloud</strong> alongside them. Not survey-grade, but dimensionable.</li>
+        </ul>
+        <hr class="rule">
+        <p class="t-cap">Good enough to design against. I would not hand it to a structural engineer.</p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Two uses. The first is the ordinary one: existing-condition survey. This is a school built decades ago; the drawings are old and incomplete. The scan stands in for going out and measuring it.</p>
+    <p>And a technical note, since I said earlier that Gaussians are appearance and not geometry. That is true — so alongside them we extract a low-density point cloud. It is not survey-grade, and I would not hand it to a structural engineer. But it is dimensionable, which is what makes this usable in a real design process.</p>
+    <span class="cue">[40초. 한계를 먼저 말하는 것이 이 방에서는 강점.]</span>
+  </aside>
+</section>
+
+<!-- 17 · 0:45 -->
+<section data-sec="Munsan" data-dur="45" data-title="Use 2 — design review inside the existing place">
+  <div class="body-area has-title">
+    <div class="split">
+      <div class="media">
+        <img data-slot="assets/munsan-overlay.jpg" data-desc="3DGS 스캔 위에 설계안을 겹친 디자인 검토 화면" src="assets/munsan-overlay.jpg" alt="">
+        <p class="cap">Our competition proposal, overlaid on the scan.</p>
+      </div>
+      <div class="body">
+        <p class="pull" style="margin-bottom:22px;">
+          The proposal is judged inside the existing place, not against an abstracted
+          model of it.
+        </p>
+        <p class="t-body">
+          We overlay the design directly onto the scan and walk through it. Daylight,
+          circulation and the relationship to what is already there stay visible
+          throughout, instead of being reconstructed from drawings.
+        </p>
+        <hr class="rule">
+        <p class="t-cap">The user of the twin here is not a visitor. It is the designer.</p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>The second use is the one I find more interesting. We overlay our proposal directly onto the scan, and walk through it.</p>
+    <p>Which means the design gets judged inside the existing place, rather than against an abstracted model of it. Daylight, circulation, the relationship to what is already there — those stay visible the whole time, instead of being reconstructed from drawings in your head.</p>
+    <p>The user of the twin here is not a visitor. It is the designer. Same capability, completely different consumer.</p>
+    <span class="cue">[45초. 오버레이 화면을 짚으면서.]</span>
+  </aside>
+</section>
+
+<!-- 18 · 0:35 -->
+<section data-sec="Munsan" data-dur="35" data-title="What the two cases share">
+  <div class="body-area has-title">
+    <p class="pull" style="margin-bottom:26px;">
+      The scan will outlive the school's current state.
+    </p>
+    <p class="t-body-lg" style="margin-bottom:20px;">
+      At Yonsei that was an accident — we found it out afterwards. Here it is deliberate.
+      This building is about to be rebuilt for its community, and the scan is the last
+      full record of what it was before. Which is also a different posture toward the
+      existing than designing on a cleared model.
+    </p>
+    <hr class="rule">
+    <p class="t-cap">Competition result pending.</p>
+  </div>
+  <aside class="notes">
+    <p>And notice that the same thing is happening again. The scan will outlive the school's current state.</p>
+    <p>At Yonsei that was an accident — we found it out afterwards. Here it is deliberate. This building is about to be rebuilt for its community, and the scan is the last full record of what it was before. Which is also, I think, a different posture toward the existing than designing on a cleared model.</p>
+    <p>The competition result isn't out yet.</p>
+    <span class="cue">[35초.]</span>
+  </aside>
+</section>
+
+<!-- ==========================================================
+     NEXT · 0:50
+     ========================================================== -->
+
+<!-- 19 · 0:35 -->
+<section data-sec="Next" data-dur="35" data-title="Where this leaves us">
+  <div class="body-area has-title">
+    <div class="split">
+      <div class="media">
+        <img data-slot="assets/playground.jpg" data-desc="놀이터 3DGS 스캔 — 4번 슬라이드와 동일 이미지" src="assets/playground.jpg" alt="">
+      </div>
+      <div class="body">
+        <p class="t-body-lg" style="margin-bottom:20px;">
+          We spent a long time trying to remove this blur. It is the only place in the
+          whole reconstruction where something actually happened.
+        </p>
+        <p class="pull">Presence before synchronization.</p>
+        <hr class="rule">
+        <p class="t-cap">
+          What we don't have yet: whether an archive can become a place where events
+          continue, rather than a monument.
+        </p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>To close where I started. We spent a long time trying to remove this blur — and it is the only place in the whole reconstruction where something actually happened.</p>
+    <p>Presence before synchronization. That is the finding I'd take away from this year.</p>
+    <p>What we don't have yet is the next step: whether an archive can become a place where events continue, rather than a monument. Thank you.</p>
+    <span class="cue">[35초. 감사 인사 늘리지 말 것.]</span>
+  </aside>
+</section>
+
+<!-- 20 · 0:15 -->
+<section data-sec="Next" data-dur="15" data-title="For discussion">
+  <div class="body-area has-title">
+    <ul class="plain">
+      <li>Can two spaces be one event — and does anyone actually want them to be?</li>
+      <li>What would it take for an archive to become a place where events <em>continue</em>?</li>
+      <li>If a twin makes presence countable, what does it make invisible?</li>
+    </ul>
+    <hr class="rule" style="margin-top:30px;">
+    <p class="t-cap">
+      Hyeogjin Noh &nbsp;·&nbsp; hyeogjin.noh@voidbox.ai &nbsp;·&nbsp; nubim.voidbox.ai
+    </p>
+  </div>
+  <aside class="notes">
+    <p>Three questions I'd like to take into the discussion.</p>
+    <span class="cue">[시간이 남을 때만.]</span>
+  </aside>
+</section>
+
+<!-- ==========================================================
+     BACKUP — Q&A only, uncounted
+     ========================================================== -->
+
+<section data-sec="Next" data-dur="0" data-visibility="uncounted" data-title="Backup" data-sub="Husserl — Abschattung">
+  <div class="body-area has-title">
+    <p class="pull plain" style="margin-bottom:20px;">
+      "A thing in space is given to us, essentially, only through adumbrations."
+    </p>
+    <p class="t-cap" style="margin-bottom:22px;">— Edmund Husserl, <em>Ideen I</em> (1913), §41</p>
+    <p class="t-body">
+      The object is never given whole; it is given as partial profiles, which
+      consciousness synthesises across the movement of the body. Map that onto the
+      pipeline — the object, the input images, the scanner's walking path, the
+      optimization. <strong>3DGS is arguably that idea turned into an algorithm.</strong>
+    </p>
+  </div>
+  <aside class="notes">
+    <p>Only if asked about theoretical background.</p>
+  </aside>
+</section>
+
+<section data-sec="Next" data-dur="0" data-visibility="uncounted" data-title="Backup" data-sub="Borges — the 1:1 map">
+  <div class="body-area has-title">
+    <p class="pull plain" style="margin-bottom:20px;">
+      "…the Cartographers Guild drew a Map of the Empire whose size was that of the
+      Empire, coinciding point for point with it. Succeeding Generations… delivered it
+      up to the Inclemencies of Sun and Winters."
+    </p>
+    <p class="t-cap" style="margin-bottom:22px;">— Jorge Luis Borges, "Del rigor en la ciencia", 1946</p>
+    <p class="t-body">
+      Asked whether we are building the 1:1 map: our data says fidelity alone neither
+      made the archive valuable nor useless. What made it valuable was that it stayed
+      open. Borges's map failed because nobody could stand inside it.
+    </p>
+  </div>
+  <aside class="notes">
+    <p>Only if asked whether this is the 1:1 map problem.</p>
+  </aside>
+</section>
+
+<section data-sec="Next" data-dur="0" data-visibility="uncounted" data-title="Backup" data-sub="Archive and repertoire">
+  <div class="body-area has-title">
+    <div class="duo" style="align-items:flex-start;">
+      <div class="col">
+        <h3 class="t-lead">Archive</h3>
+        <hr class="rule" style="margin:16px 0;">
+        <p class="t-body">Knowledge preserved in enduring media — text, image, object, building.</p>
+      </div>
+      <div class="col">
+        <h3 class="t-lead">Repertoire</h3>
+        <hr class="rule" style="margin:16px 0;">
+        <p class="t-body">Knowledge transmitted only through embodied practice — gesture, speech, ritual, encounter.</p>
+      </div>
+    </div>
+    <hr class="rule" style="margin-top:34px;">
+    <p class="t-body-lg">
+      3DGS is by nature an archive medium; the events at an exhibition are repertoire.
+      Our nine comments were an attempt to graft one onto the other, and it did not take.
+    </p>
+    <p class="credit">Diana Taylor, <em>The Archive and the Repertoire</em>, Duke University Press, 2003.</p>
+  </div>
+  <aside class="notes">
+    <p>Only if asked what exactly was lost.</p>
+  </aside>
+</section>
+
+</div><!-- /.slides -->
+</div><!-- /.reveal -->
+
+<div id="pace">
+  <span class="clock" id="paceClock">00:00</span>
+  <span class="delta" id="paceDelta">±0:00</span>
+  <span class="sec" id="paceSec">—</span>
+</div>
+
+<div id="notesOverlay"><h4>SPEAKER NOTES</h4><div id="notesBody"></div></div>
+
+<div id="helpBar">
+  <span><kbd>S</kbd>speaker view</span>
+  <span><kbd>T</kbd>timer</span>
+  <span><kbd>I</kbd>notes on this screen</span>
+  <span><kbd>R</kbd>reset timer</span>
+  <span><kbd>B</kbd>blank screen</span>
+  <span><kbd>ESC</kbd>overview</span>
+  <span><kbd>?</kbd>close</span>
+</div>
+
+<script src="reveal/reveal.js"></script>
+<script src="reveal/plugin/notes/notes.js"></script>
+<script src="js/presenter.js"></script>
+
+</body>
+</html>

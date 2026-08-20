@@ -1,0 +1,17 @@
+# working state the server writes — never worth versioning
+.backups/
+assets/_replaced/
+
+# python / node scratch
+__pycache__/
+*.pyc
+node_modules/
+package-lock.json
+
+# leftovers from a failed setup attempt
+_to_delete/
+
+# os junk
+.DS_Store
+Thumbs.db
+desktop.ini

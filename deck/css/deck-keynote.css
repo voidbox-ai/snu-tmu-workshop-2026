@@ -1,0 +1,451 @@
+/* =========================================================
+   Pretendard — bundled, so the deck looks identical offline
+   and on any machine. One variable file covers 400-800.
+   ========================================================= */
+@font-face {
+  font-family: 'Pretendard';
+  src: local('Pretendard Variable'), local('Pretendard'),
+       url('../fonts/PretendardVariable.woff2') format('woff2-variations');
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* =========================================================
+   Presence Before Synchronization — voidbox
+   SNU x TMU Annual Workshop
+   Black minimal theme, matched to the "음영과 사건" deck
+   ========================================================= */
+
+:root {
+  --fg:        #ffffff;
+  --fg-dim:    #b4b4b4;
+  --fg-muted:  #7a7a7a;
+  --fg-faint:  #4a4a4a;
+  --rule:      #333333;
+  --bg:        #000000;
+
+  --font: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+.reveal-viewport { background: var(--bg); }
+
+.reveal-viewport,
+.reveal {
+  --r-main-font: var(--font);
+  --r-heading-font: var(--font);
+  --r-code-font: var(--font-mono);
+  font-family: var(--font);
+  font-weight: 400;
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* nothing inside the deck may inherit a different family */
+.reveal h1, .reveal h2, .reveal h3, .reveal h4,
+.reveal p, .reveal li, .reveal span, .reveal div,
+.reveal text, .reveal button, .reveal input, .reveal textarea {
+  font-family: var(--font);
+}
+
+.reveal .slides { text-align: left; }
+.reveal .slides section { height: 100%; }
+
+/* kill reveal's default uppercase headings */
+.reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+  text-transform: none;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.15;
+  text-shadow: none;
+}
+
+.reveal p { margin: 0; line-height: 1.5; }
+.reveal em { font-style: italic; color: var(--fg-dim); }
+.reveal strong { font-weight: 700; color: var(--fg); }
+
+/* ---------- layout primitives ---------- */
+
+.center-stack {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+}
+
+.left-stack {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  padding: 0 40px;
+}
+
+/* small grey label, top-left — matches the original deck */
+.slug {
+  position: absolute;
+  top: 44px;
+  left: 60px;
+  font-size: 24px;
+  color: var(--fg-muted);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.rule {
+  width: 160px;
+  height: 1px;
+  background: var(--rule);
+  border: 0;
+  margin: 36px 0;
+}
+.center-stack .rule { margin: 36px auto; }
+
+.credit {
+  position: absolute;
+  bottom: 40px;
+  left: 60px;
+  right: 60px;
+  font-size: 17px;
+  color: var(--fg-faint);
+  font-style: italic;
+  line-height: 1.5;
+}
+.credit.right { text-align: right; }
+
+/* ---------- type scale ---------- */
+
+.t-title   { font-size: 96px; font-weight: 800; letter-spacing: -0.03em; }
+.t-sub     { font-size: 34px; color: var(--fg-dim); font-weight: 400; }
+.t-stmt    { font-size: 60px; font-weight: 700; line-height: 1.28; }
+.t-stmt-sm { font-size: 46px; font-weight: 600; line-height: 1.35; }
+.t-body    { font-size: 32px; color: var(--fg-dim); line-height: 1.6; }
+.t-lead    { font-size: 38px; color: var(--fg); line-height: 1.5; }
+.t-note    { font-size: 24px; color: var(--fg-muted); font-style: italic; }
+
+.dim   { color: var(--fg-dim); }
+.muted { color: var(--fg-muted); }
+.faint { color: var(--fg-faint); }
+
+/* ---------- big numbers ---------- */
+
+.numgrid {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 110px;
+  width: 100%;
+}
+.numgrid.tight { gap: 80px; }
+
+.num {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.num .v {
+  font-size: 168px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.num .v.sm { font-size: 128px; }
+.num .k {
+  font-size: 24px;
+  color: var(--fg-muted);
+  margin-top: 22px;
+  letter-spacing: 0.02em;
+  max-width: 260px;
+  line-height: 1.4;
+}
+.num.zero .v { color: var(--fg); }
+
+/* ---------- lists ---------- */
+
+.reveal ul.plain {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+.reveal ul.plain li {
+  font-size: 34px;
+  color: var(--fg-dim);
+  line-height: 1.45;
+  padding: 0 0 0 40px;
+  margin: 0 0 30px 0;
+  position: relative;
+}
+.reveal ul.plain li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--fg-faint);
+}
+.reveal ul.plain li strong { color: var(--fg); }
+.reveal ul.plain li:last-child { margin-bottom: 0; }
+
+/* numbered lessons */
+.lessons { width: 100%; }
+.lesson {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 0 28px;
+  margin-bottom: 46px;
+  align-items: start;
+}
+.lesson:last-child { margin-bottom: 0; }
+.lesson .n {
+  font-size: 62px;
+  font-weight: 800;
+  color: var(--fg-faint);
+  line-height: 0.95;
+  font-variant-numeric: tabular-nums;
+}
+.lesson .h {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+.lesson .d {
+  font-size: 27px;
+  color: var(--fg-muted);
+  line-height: 1.5;
+}
+
+/* three-step pipeline text */
+.steps { display: flex; gap: 56px; width: 100%; }
+.step { flex: 1; }
+.step .sn {
+  font-size: 22px;
+  color: var(--fg-faint);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  margin-bottom: 18px;
+}
+.step .sh { font-size: 30px; font-weight: 700; margin-bottom: 14px; line-height: 1.25; }
+.step .sd { font-size: 23px; color: var(--fg-muted); line-height: 1.55; }
+
+/* ---------- figures & image slots ---------- */
+
+.figure { width: 100%; text-align: center; }
+.figure img {
+  max-width: 100%;
+  max-height: 640px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+  border: 0;
+  box-shadow: none;
+  background: none;
+}
+.figure .cap {
+  font-size: 26px;
+  color: var(--fg-dim);
+  margin-top: 34px;
+  line-height: 1.5;
+}
+.figure .cap strong { color: var(--fg); }
+
+/* dashed placeholder shown when the image file is not there yet */
+.slot {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px dashed #3a3a3a;
+  border-radius: 2px;
+  background: #0a0a0a;
+  color: var(--fg-faint);
+  text-align: center;
+  padding: 34px;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+.slot .slot-file {
+  /* deliberately monospace — this is a file path, and it only ever shows
+     while an asset is still missing. It never appears during the talk. */
+  font-family: var(--font-mono);
+  font-size: 20px;
+  color: #6f6f6f;
+  margin-bottom: 12px;
+  word-break: break-all;
+}
+.slot .slot-desc { font-size: 19px; color: #4a4a4a; line-height: 1.5; max-width: 90%; }
+
+/* triptych — Alberti / Cezanne / 3DGS */
+.triptych { display: flex; gap: 46px; width: 100%; align-items: flex-end; }
+.triptych .col { flex: 1; text-align: center; }
+.triptych .col img,
+.triptych .col .slot { width: 100%; height: 400px; object-fit: cover; }
+.triptych .col .name { font-size: 34px; font-weight: 700; margin-top: 28px; }
+.triptych .col .year { font-size: 24px; color: var(--fg-muted); font-style: italic; margin-top: 8px; }
+.triptych .col .line { font-size: 22px; color: var(--fg-dim); margin-top: 18px; line-height: 1.45; }
+
+/* two-up */
+.duo { display: flex; gap: 40px; width: 100%; align-items: center; }
+.duo .col { flex: 1; }
+.duo .col img, .duo .col .slot { width: 100%; height: 470px; object-fit: cover; }
+.duo .col .cap { font-size: 22px; color: var(--fg-muted); margin-top: 20px; text-align: center; }
+
+/* image left, text right */
+.split { display: flex; gap: 68px; width: 100%; align-items: center; }
+.split .media { flex: 0 0 46%; }
+.split .media img, .split .media .slot { width: 100%; height: 480px; object-fit: cover; }
+.split .body { flex: 1; }
+
+/* ---------- svg diagrams ---------- */
+.diagram { width: 100%; text-align: center; }
+.diagram svg { width: 100%; height: auto; max-height: 560px; }
+.diagram .cap { font-size: 25px; color: var(--fg-dim); margin-top: 26px; }
+
+.svg-label      { fill: #ffffff; font-size: 25px; font-weight: 700; }
+.svg-label-sm   { fill: #b4b4b4; font-size: 20px; font-weight: 400; }
+.svg-label-xs   { fill: #7a7a7a; font-size: 17px; font-weight: 400; }
+.svg-label-mono { fill: #7a7a7a; font-size: 18px; font-family: var(--font);
+                  letter-spacing: 0.01em; }
+.svg-stroke     { stroke: #ffffff; stroke-width: 1.6; fill: none; }
+.svg-stroke-dim { stroke: #4a4a4a; stroke-width: 1.4; fill: none; }
+.svg-fill       { fill: #ffffff; }
+.svg-fill-dim   { fill: #3a3a3a; }
+
+/* ---------- footer / progress ---------- */
+
+.reveal .slide-number {
+  background: none;
+  color: var(--fg-faint);
+  font-size: 17px;
+  right: 26px;
+  bottom: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+.reveal .progress {
+  height: 2px;
+  color: #666;
+}
+
+/* ---------- presenter overlay (works from file:// too) ---------- */
+
+#pace {
+  position: fixed;
+  left: 20px;
+  bottom: 16px;
+  z-index: 60;
+  display: none;
+  align-items: baseline;
+  gap: 16px;
+  font-family: var(--font);
+  font-variant-numeric: tabular-nums;
+  font-size: 20px;
+  letter-spacing: 0.01em;
+  color: #6a6a6a;
+  pointer-events: none;
+}
+#pace.on { display: flex; }
+#pace .clock { color: #d0d0d0; font-size: 26px; font-variant-numeric: tabular-nums; }
+#pace .delta { font-variant-numeric: tabular-nums; }
+#pace .delta.ahead  { color: #6f9f6f; }
+#pace .delta.behind { color: #b57f7f; }
+#pace .sec { color: #4a4a4a; }
+
+#notesOverlay {
+  position: fixed;
+  right: 0; top: 0; bottom: 0;
+  width: 33vw;
+  max-width: 560px;
+  z-index: 55;
+  background: rgba(8,8,8,0.94);
+  border-left: 1px solid #262626;
+  padding: 40px 34px;
+  overflow-y: auto;
+  display: none;
+  font-size: 17px;
+  line-height: 1.62;
+  color: #c8c8c8;
+  box-sizing: border-box;
+}
+#notesOverlay.on { display: block; }
+#notesOverlay h4 {
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  color: #5a5a5a;
+  margin: 0 0 20px 0;
+  font-weight: 700;
+}
+#notesOverlay p { margin: 0 0 15px 0; font-size: 17px; line-height: 1.62; }
+#notesOverlay .cue {
+  color: #8a7f5f;
+  font-style: italic;
+  font-size: 15px;
+  display: block;
+  margin: 14px 0;
+  padding-left: 12px;
+  border-left: 2px solid #3a3520;
+}
+
+#helpBar {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 70;
+  background: rgba(10,10,10,0.97);
+  border-top: 1px solid #262626;
+  padding: 22px 40px;
+  display: none;
+  font-family: var(--font);
+  font-size: 17px;
+  color: #8a8a8a;
+  justify-content: center;
+  gap: 42px;
+  flex-wrap: wrap;
+}
+#helpBar.on { display: flex; }
+#helpBar kbd {
+  font-family: var(--font);
+  font-weight: 600;
+  background: #1e1e1e;
+  border: 1px solid #3a3a3a;
+  border-radius: 3px;
+  padding: 3px 9px;
+  color: #d8d8d8;
+  margin-right: 9px;
+}
+
+/* print / PDF export */
+@media print {
+  #pace, #notesOverlay, #helpBar { display: none !important; }
+}
+
+/* slot sizing inside a plain figure */
+.figure .slot { width: 76%; height: 540px; }
+.split .media .slot { height: 480px; }
+
+/* ---------- reveal container overrides ---------- */
+.reveal .slides > section {
+  padding: 56px 68px;
+  box-sizing: border-box;
+  text-align: left;
+}
+.figure img { max-height: 540px; }
+.figure.tall img { max-height: 640px; }
+.figure.tall .slot { height: 620px; }
+
+/* lists and body columns stay left-aligned even inside a centred stack */
+.center-stack .lessons,
+.center-stack ul.plain,
+.center-stack .steps,
+.center-stack .split .body,
+.center-stack .duo .col { text-align: left; }
+.center-stack .duo .col .cap { text-align: center; }
+
+/* reveal.css hard-codes Helvetica on these two; win on specificity */
+.reveal .slide-number,
+.reveal .slide-number a { font-family: var(--font); font-variant-numeric: tabular-nums; }

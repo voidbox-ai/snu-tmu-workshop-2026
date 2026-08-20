@@ -1,0 +1,9 @@
+Drop any pictures here — straight from Explorer is fine, a whole folder at once.
+
+Nothing in this folder is used by the slides directly. Open the images page
+(http://localhost:8000/images.html) and drag them from the tray onto the slot
+they belong to; that copies the file under the name the deck expects and leaves
+the original here.
+
+HEIC files from an iPhone will show up but cannot be assigned — browsers do not
+display them. Export as JPEG first.

@@ -1,0 +1,19 @@
+# The repo is authored on Linux and used on Windows — normalise to LF in git
+# and let each checkout decide, so the deck never churns on line endings.
+* text=auto eol=lf
+
+# never touch these
+*.woff2 binary
+*.jpg   binary
+*.jpeg  binary
+*.png   binary
+*.gif   binary
+*.webp  binary
+*.pdf   binary
+
+# vendored reveal.js and the bundled font: exclude from language stats and diffs
+reveal/**            linguist-vendored
+deck/reveal/**       linguist-vendored
+fonts/**             linguist-vendored
+deck/fonts/**        linguist-vendored
+deck/reveal/plugin/notes/notes.js -diff
