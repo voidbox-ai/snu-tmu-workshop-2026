@@ -1,35 +1,53 @@
 import type { SlideMeta } from '../types'
-import { ImageSlot } from '../components/ImageSlot'
-import { Body, Cap, Media, Note, Pull, Rule, Split, Text } from '../components/layout'
+import { MediaSlot } from '../components/MediaSlot'
+import { Cap, Col, Duo, Note, Pull, Rule } from '../components/layout'
 
 export const meta: SlideMeta = {
   sec: 'Yonsei',
-  dur: 40,
+  dur: 70,
   title: 'And then the layer we cared most about',
 }
 
+/* The two directions, shown as the two things they actually were. Neither
+   caption carries the accent: slide 9 is about to report that one of these
+   two ran zero times, and the deck's one color belongs to what survived. */
 export default function InteractionLayer() {
   return (
-    <Split>
-      <Media>
-        <ImageSlot slot="assets/archive-site.jpg" desc="아카이브 사이트 / 댓글·동기화 레이어 화면" />
-        <Cap>The interaction layer, as designed.</Cap>
-      </Media>
-      <Body>
-        <Pull style={{ marginBottom: 22 }}>
-          An interaction layer — comments, and two-way sync between the physical and the virtual
-          exhibition.
-        </Pull>
-        <Text>
-          Something happening in the hall should change the virtual exhibition. Something happening
-          in the virtual exhibition should change the hall.
-        </Text>
-        <Rule />
-        <Note>
-          This is where most of our design effort went. It is the second layer — our attempt to lay
-          events back over the geometry.
-        </Note>
-      </Body>
-    </Split>
+    <>
+      <Duo style={{ marginBottom: 24 }}>
+        <Col>
+          <MediaSlot
+            slot="assets/sync-online-to-hall.png"
+            desc="온라인에서 쓴 방명록을 현장 방명록에 손으로 옮겨 적는 장면"
+          />
+          <Cap>
+            <b>Virtual → physical</b> — a note written online, copied out by hand into the
+            guestbook at the booth in the hall.
+          </Cap>
+        </Col>
+        <Col>
+          <MediaSlot
+            slot="assets/sync-hall-to-online.webp"
+            desc="현장에서 쓴 방명록을 QR 코드로 촬영해 온라인에 올리는 장면"
+          />
+          <Cap>
+            <b>Physical → virtual</b> — a note written by hand in the hall, photographed through a
+            QR code and posted online.
+          </Cap>
+        </Col>
+      </Duo>
+
+      {/* Two sentences, one per line: the parallel is the point. */}
+      <Pull>
+        Something happening in the hall should change the virtual exhibition.
+        <br />
+        Something happening in the virtual exhibition should change the hall.
+      </Pull>
+      <Rule />
+      <Note>
+        This is where most of our design effort went. It is the second layer — our attempt to lay
+        events back over the geometry.
+      </Note>
+    </>
   )
 }

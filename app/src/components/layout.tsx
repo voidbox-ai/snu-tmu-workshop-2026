@@ -61,19 +61,32 @@ export function Pic({ children, style }: Kids) {
   )
 }
 
-/** Two equal columns of imagery. */
-export function Duo({ children, style }: Kids) {
+/**
+ * Two columns of imagery.
+ *
+ * By default the two are balanced: one shape, one size, cropped to 16:9 —
+ * which is what you want when the sources have very different proportions.
+ * `fit` instead gives each column the width its own figure asks for at a
+ * shared height — nothing is cropped, and the two still line up.
+ */
+export function Duo({ children, style, fit }: Kids & { fit?: boolean }) {
   return (
-    <div className="duo" style={style}>
+    <div className={cx('duo', fit && 'fit')} style={style}>
       {children}
     </div>
   )
 }
 
-/** Three short, wide thumbnails in a row. */
-export function Strip({ children, style }: Kids) {
+/**
+ * A row of figures — three, typically.
+ *
+ * By default they sit in a short band. `wide` makes them the subject of the
+ * slide instead: equal 3:2 panels, set wider than the text measure, cropped a
+ * little at the sides in exchange for a third more height.
+ */
+export function Strip({ children, style, wide }: Kids & { wide?: boolean }) {
   return (
-    <div className="strip" style={style}>
+    <div className={cx('strip', wide && 'wide')} style={style}>
       {children}
     </div>
   )

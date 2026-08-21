@@ -1,5 +1,5 @@
 import type { SlideMeta } from '../types'
-import { VideoSlot } from '../components/VideoSlot'
+import { MediaSlot } from '../components/MediaSlot'
 import { Body, Cap, List, Media, Pull, Split } from '../components/layout'
 
 export const meta: SlideMeta = {
@@ -14,7 +14,7 @@ export default function OneAssumption() {
       <Media>
         {/* The smear is a thing that happened, so it is worth showing as
             motion. Falls back to the still if the clip is not there yet. */}
-        <VideoSlot
+        <MediaSlot
           slot="assets/playground.mp4"
           poster="assets/playground.jpg"
           desc="놀이터 3DGS 스캔 — 번진 인물이 지나가는 구간"

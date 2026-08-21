@@ -1,5 +1,5 @@
 import type { SlideMeta } from '../types'
-import { ImageSlot } from '../components/ImageSlot'
+import { MediaSlot } from '../components/MediaSlot'
 import { Body, Cap, List, Media, Note, Pull, Rule, Split } from '../components/layout'
 
 export const meta: SlideMeta = {
@@ -13,7 +13,7 @@ export default function MunsanSchool() {
   return (
     <Split>
       <Media>
-        <ImageSlot slot="assets/munsan-scan.jpg" desc="문산초등학교 3DGS 스캔 화면" />
+        <MediaSlot slot="assets/munsan-scan.jpg" desc="문산초등학교 3DGS 스캔 화면" />
         <Cap>The school as it currently stands, scanned.</Cap>
       </Media>
       <Body>

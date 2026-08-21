@@ -1,5 +1,5 @@
 import type { SlideMeta } from '../types'
-import { ImageSlot } from '../components/ImageSlot'
+import { MediaSlot } from '../components/MediaSlot'
 import { Acc, Cap, Col, Duo, Text } from '../components/layout'
 
 export const meta: SlideMeta = {
@@ -12,23 +12,22 @@ export const meta: SlideMeta = {
 export default function YonseiTwoPlaces() {
   return (
     <>
-      <Duo style={{ marginBottom: 24 }}>
+      <Duo fit style={{ marginBottom: 24 }}>
         <Col>
-          <ImageSlot slot="assets/yonsei-physical.jpg" desc="연세대 졸업전시 물리 전시장 사진" />
+          <MediaSlot slot="assets/yonsei-physical.jpg" desc="연세대 졸업전시 물리 전시장 사진" />
           <Cap>
             <b>Physical</b> — June 4–8, 2026 · five days
           </Cap>
         </Col>
         <Col>
-          <ImageSlot slot="assets/yonsei-virtual.jpg" desc="온라인 전시 스크린샷 (스캔된 전시장)" />
+          <MediaSlot slot="assets/yonsei-virtual.mp4" desc="온라인 전시 스크린샷 (스캔된 전시장)" />
           <Cap>
             <b className="acc">Virtual</b> — opened June 5, 2026 · <Acc>still open today</Acc>
           </Cap>
         </Col>
       </Duo>
       <Text>
-        A partnership between the department and voidbox: run one graduation exhibition in two
-        places at once, and see whether the two could behave as a single event.
+        A partnership between the department of architectural engineering and voidbox
       </Text>
     </>
   )

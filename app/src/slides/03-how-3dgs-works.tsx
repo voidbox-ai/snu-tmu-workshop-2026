@@ -1,5 +1,5 @@
 import type { SlideMeta } from '../types'
-import { ImageSlot } from '../components/ImageSlot'
+import { MediaSlot } from '../components/MediaSlot'
 import { Body, Cap, Diagram, Pic, Plate, Pull, Text } from '../components/layout'
 import { PipelineDiagram } from '../components/diagrams/PipelineDiagram'
 
@@ -15,7 +15,7 @@ export default function How3dgsWorks() {
     <>
       <Plate style={{ marginBottom: 26 }}>
         <Pic>
-          <ImageSlot slot="assets/cezanne.jpg" desc="Cézanne, Mont Sainte-Victoire" />
+          <MediaSlot slot="assets/cezanne.jpg" desc="Cézanne, Mont Sainte-Victoire" />
           <Cap>
             Cézanne, <i>Mont Sainte-Victoire</i> — one mountain, held on one canvas as many
             separate glances.

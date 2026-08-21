@@ -1,5 +1,5 @@
 import type { SlideMeta } from '../types'
-import { ImageSlot } from '../components/ImageSlot'
+import { MediaSlot } from '../components/MediaSlot'
 import { Body, Cap, List, Media, Note, Rule, Split } from '../components/layout'
 
 export const meta: SlideMeta = {
@@ -12,7 +12,7 @@ export default function UseOneSurvey() {
   return (
     <Split>
       <Media>
-        <ImageSlot
+        <MediaSlot
           slot="assets/munsan-pointcloud.jpg"
           desc="추출된 저밀도 포인트클라우드 / 실측 화면"
         />

@@ -1,5 +1,5 @@
 import type { SlideMeta } from '../types'
-import { ImageSlot } from '../components/ImageSlot'
+import { MediaSlot } from '../components/MediaSlot'
 import { Body, Media, Note, Pull, Rule, Split, Text } from '../components/layout'
 
 export const meta: SlideMeta = {
@@ -14,7 +14,7 @@ export default function WhereThisLeavesUs() {
   return (
     <Split>
       <Media>
-        <ImageSlot
+        <MediaSlot
           slot="assets/playground.jpg"
           desc="놀이터 3DGS 스캔 — 4번 슬라이드와 동일 이미지"
         />

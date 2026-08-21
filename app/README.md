@@ -1,6 +1,6 @@
 # Presence Before Synchronization — React + TypeScript
 
-SNU × TMU Annual Workshop · 19 슬라이드 + 백업 4장 · 13:35 계획 · reveal.js 5.1.0
+SNU × TMU Annual Workshop · 19 슬라이드 + 백업 4장 · 14:05 계획 · reveal.js 5.1.0
 
 발표 엔진은 **그대로 reveal.js**입니다. 바뀐 것은 슬라이드를 담는 방식뿐입니다 —
 44KB짜리 `index.html` 하나였던 것이 슬라이드 한 장에 파일 한 쌍으로 갈라졌습니다.
@@ -79,14 +79,26 @@ export default function WhatTheLayerDid() {
 `Stats`/`Stat`, `Lessons`/`Lesson`, `Pull`, `List`, `Rule`, `Text`, `Note`, `Diagram`. deck.css 의 클래스에
 이름을 붙인 얇은 껍데기라, 슬라이드 파일이 div 더미가 아니라 구조로 읽힙니다.
 
-도판은 `<ImageSlot slot="assets/x.jpg" desc="어떤 사진인지" />`. 파일이 아직 없으면
-**파일 경로와 설명이 적힌 점선 자리표시자**로 대체되므로, 사진 없이도 발표가 됩니다.
+도판을 나란히 놓는 두 가지 방식:
 
-영상은 `<VideoSlot slot="assets/x.mp4" poster="assets/x.jpg" desc="…" />`.
-슬라이드에 들어오면 **자동으로 재생되고 나가면 멈춥니다** (무음·루프, reveal이 처리).
-**영상 → 포스터 스틸 → 점선 자리표시자** 순으로 물러나므로 mp4가 아직 없어도 발표가 됩니다.
-지금은 슬라이드 4(놀이터 스캔)가 이 방식입니다 — `public/assets/playground.mp4` 를 넣으면
-영상으로, 없으면 지금처럼 `playground.jpg` 로 나옵니다.
+- **`<Duo fit>`** — 두 장. 각 칸이 **자기 비율이 요구하는 만큼만 넓어지고 높이는 서로 맞춰집니다.**
+  아무것도 잘리지 않습니다. 사진과 화면 녹화처럼 비율이 다른 둘을 나란히 놓을 때 (슬라이드 5).
+- **`<Strip wide>`** — 세 장. 같은 3:2 패널로 맞추고 본문보다 좌우 40px씩 넓게 뺍니다.
+  좌우가 조금 잘리는 대신 높이가 339px까지 나옵니다 (슬라이드 6). 세 장을 가로로 놓으면
+  높이는 폭이 정하기 때문에, 크게 보이려면 이 교환이 필요합니다.
+
+`<Duo>` · `<Strip>` 를 수식어 없이 쓰면 칸을 균등하게 나누고 도판을 잘라 채웁니다.
+
+도판과 영상 모두 `<MediaSlot slot="assets/x.jpg" desc="무엇인지" />` 하나로 넣습니다.
+**사진이냐 영상이냐는 `slot` 의 확장자가 정합니다** — `.mp4` · `.webm` · `.mov` 면 영상,
+나머지는 사진. 그래서 사진을 영상으로 바꾸는 건 문자열 한 곳을 고치는 일이고,
+이미지 넣기 페이지가 그 수정을 대신 해줍니다.
+
+영상일 때는 슬라이드에 들어오면 **자동으로 재생되고 나가면 멈춥니다** (무음·루프, reveal이 처리).
+`poster="assets/x.jpg"` 를 붙이면 첫 프레임 전에 그 스틸이 보입니다.
+
+파일이 없으면 **원본 → 포스터 스틸 → 점선 자리표시자** 순으로 물러나므로,
+사진도 영상도 아직 없는 상태에서 발표가 됩니다. 지금은 슬라이드 4(놀이터 스캔)가 영상입니다.
 
 ---
 
@@ -105,22 +117,30 @@ export default function WhatTheLayerDid() {
 
 ---
 
-## 이미지 넣기
+## 이미지·영상 넣기
 
-dev 서버를 띄운 뒤 **<http://localhost:8000/images.html>** 을 엽니다. 10개 칸에
-**사진을 끌어다 놓기만 하면** 슬라이드가 찾는 이름으로 저장됩니다.
+dev 서버를 띄운 뒤 **<http://localhost:8000/images.html>** 을 엽니다. 11개 칸에
+**파일을 끌어다 놓기만 하면** 슬라이드가 찾는 이름으로 저장됩니다.
 
-칸 목록은 `src/slides/*.tsx` 의 `<ImageSlot>` 에서 직접 읽어오므로, 슬라이드에 도판을
-추가하면 이 페이지에도 자동으로 나타납니다.
+칸 목록은 `src/slides/*.tsx` 의 `<MediaSlot slot="…">` 에서 직접 읽어오므로,
+슬라이드에 도판이나 영상을 추가하면 이 페이지에도 자동으로 나타납니다.
+`poster=` 는 칸으로 세지 않습니다 — 영상 뒤에 깔리는 스틸일 뿐이고, 보통 다른 칸의 파일을 가리킵니다.
 
 - 큰 사진은 브라우저에서 긴 변 2400px으로 줄여 올립니다 (`원본` 버튼으로 무시)
 - 교체·삭제된 사진은 `public/assets/_replaced/` 로 옮겨집니다 (지워지지 않습니다)
 - 아직 어디 쓸지 안 정한 사진은 `public/assets/_pool/` 에 통째로 복사해 넣고 새로고침
 - iPhone HEIC는 브라우저가 못 읽어 거부됩니다 — JPEG로 내보내 주세요
 
-**영상은 이 페이지로 못 넣습니다.** `public/assets/` 에 직접 복사하세요.
-H.264 mp4를 쓰고(브라우저가 가장 확실하게 재생합니다), **GitHub 파일당 100MB 제한**이
-있으니 필요한 구간만 잘라 압축해 주세요. 포스터 스틸은 이 페이지에서 그대로 넣으면 됩니다.
+**사진과 영상을 가리지 않습니다.** 어느 칸에든 넣으면 되고, 사진 칸에 영상을 넣으면
+확장자를 바꿔 저장하면서 **슬라이드 소스의 `slot=` 도 같이 고쳐집니다**
+(`munsan-scan.jpg` → `munsan-scan.mp4`). 반대 방향도 같습니다. 지금 영상이 들어 있는 칸에는
+`영상` 배지가 붙습니다.
+
+- 영상은 **줄이지 않고 원본 그대로** 올라갑니다 (사진만 2400px으로 줄입니다)
+- **100MB를 넘기지 마세요** — GitHub이 그보다 큰 파일을 거부합니다. 넘으면 경고가 뜹니다
+- H.264 mp4가 가장 확실합니다. HEVC/H.265는 브라우저가 못 여는 경우가 있습니다
+- 칸 이름이 바뀌면 화면에 "칸 이름이 …로 바뀌었습니다 (슬라이드 파일 N곳 수정)" 이라고 뜹니다
+- 바뀌기 전 파일은 지워지지 않고 `public/assets/_replaced/` 로 옮겨집니다
 
 가장 급한 두 장은 `playground.jpg`(슬라이드 4·19)와 `munsan-overlay.jpg`(슬라이드 17)입니다.
 
@@ -147,7 +167,7 @@ H.264 mp4를 쓰고(브라우저가 가장 확실하게 재생합니다), **GitH
 페이스 표시줄 읽는 법:
 
 ```
-04:12   +0:18 behind   Findings · 14/19 · plan 13:35
+04:12   +0:18 behind   Findings · 14/19 · plan 14:05
 ```
 
 경과 시간 / 이 슬라이드에 도착했어야 할 시각 대비 지연 (초록 = 여유, 빨강 = 20초 이상 지연) /
@@ -160,8 +180,8 @@ H.264 mp4를 쓰고(브라우저가 가장 확실하게 재생합니다), **GitH
 | 구간 | 상단에 표시되는 문장 | 슬라이드 | 시간 |
 |---|---|---|---|
 | Background | Background | 1–4 | 2:00 |
-| Yonsei | Case 1 — one exhibition, run in two places at once | 5–8 | 2:30 |
-| Findings | What failed, what survived, and what we take from it | 9–14 | 4:45 |
+| Yonsei | Case 1 — one exhibition, run in two places at once | 5–8 | 3:00 |
+| Findings | What failed, what survived, and what we take from it | 9–14 | 5:45 |
 | Munsan | Case 2 — the same scan, a different user | 15–18 | 2:45 |
 | Next | Next | 19 | 0:35 |
 
@@ -201,8 +221,7 @@ app/
 │   ├── components/
 │   │   ├── SlideSection.tsx    상단 인덱스 바 + 제목 + 본문 래퍼 + 노트 블록
 │   │   ├── layout.tsx          Split · Duo · Strip · Stats · Lessons · Pull · List …
-│   │   ├── ImageSlot.tsx       도판 — 파일이 없으면 점선 자리표시자로 대체
-│   │   ├── VideoSlot.tsx       영상 — 자동재생·무음·루프, 없으면 포스터로 후퇴
+│   │   ├── MediaSlot.tsx       도판·영상 — 확장자로 종류를 정하고, 없으면 자리표시자
 │   │   ├── PaceBar.tsx         왼쪽 아래 페이스 표시줄 (T)
 │   │   ├── NotesOverlay.tsx    화면 내 노트 패널 (I)
 │   │   ├── HelpBar.tsx         단축키 바 (?)

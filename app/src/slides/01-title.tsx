@@ -16,7 +16,7 @@ export default function TitleSlide() {
       <p className="t-note" style={{ fontStyle: 'normal' }}>
         <strong style={{ fontWeight: 600 }}>Hyeogjin Noh</strong> &nbsp;·&nbsp; CEO at voidbox Inc.
         <br />
-        <span className="faint">SNU × TMU Annual Workshop &nbsp;·&nbsp; 2026</span>
+        <span className="faint">SNU × TMU Annual Workshop &nbsp;·&nbsp; 2026.08.24</span>
       </p>
       <img className="logo" src="assets/logo.svg" alt="voidbox" />
     </div>

@@ -1,5 +1,5 @@
 import type { SlideMeta } from '../types'
-import { ImageSlot } from '../components/ImageSlot'
+import { MediaSlot } from '../components/MediaSlot'
 import { Body, Cap, Media, Pull, Rule, Split, Text } from '../components/layout'
 
 export const meta: SlideMeta = {
@@ -12,7 +12,7 @@ export default function WhatWeDo() {
   return (
     <Split>
       <Media>
-        <ImageSlot
+        <MediaSlot
           slot="assets/empty-hall.jpg"
           desc="철거 후 빈 전시장 로비 / 또는 문산초 외관"
         />

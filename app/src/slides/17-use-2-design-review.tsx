@@ -1,5 +1,5 @@
 import type { SlideMeta } from '../types'
-import { ImageSlot } from '../components/ImageSlot'
+import { MediaSlot } from '../components/MediaSlot'
 import { Body, Cap, Media, Note, Pull, Rule, Split, Text } from '../components/layout'
 
 export const meta: SlideMeta = {
@@ -12,7 +12,7 @@ export default function UseTwoDesignReview() {
   return (
     <Split>
       <Media>
-        <ImageSlot
+        <MediaSlot
           slot="assets/munsan-overlay.jpg"
           desc="3DGS 스캔 위에 설계안을 겹친 디자인 검토 화면"
         />

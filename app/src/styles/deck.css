@@ -191,8 +191,25 @@ hr.rule { border: 0; height: 1px; background: var(--rule); margin: 24px 0; width
    figures
    --------------------------------------------------------- */
 
+/* reveal.js and the white theme style `section img` — a 20px vertical margin,
+   a 95% cap, a frame — and do not style `section video` the same way. The
+   moment one figure in a row is a clip and the other a still, the two stop
+   lining up. Put both on the same footing and let the layout rules below own
+   the sizing outright. Their selectors carry `.reveal .slides` for exactly
+   that reason: they have to out-specify this reset, which in turn has to
+   out-specify reveal's own. */
+html:not(.print-pdf) .reveal .slides section img,
+html:not(.print-pdf) .reveal .slides section video {
+  margin: 0;
+  max-width: 100%;
+  max-height: none;
+  background: none;
+  box-shadow: none;
+  border: 0;
+}
+
 .figure { width: 100%; }
-.figure img, .figure video {
+.reveal .slides .figure img, .reveal .slides .figure video {
   max-width: 100%; max-height: 440px; object-fit: contain;
   display: block; margin: 0 auto;
   border: 1px solid var(--rule); border-radius: 2px;
@@ -214,43 +231,77 @@ hr.rule { border: 0; height: 1px; background: var(--rule); margin: 24px 0; width
   font-size: 14px; color: var(--ink-3); margin-bottom: 7px; word-break: break-all;
 }
 .slot .slot-desc { font-size: 14px; color: var(--ink-4); line-height: 1.5; max-width: 92%; }
-.figure .slot { width: 74%; height: 390px; }
+.reveal .slides .figure .slot { width: 74%; height: 390px; }
 
 /* One picture shown at its own proportions — never cropped — with the
    sentence it illustrates set beside it. The paintings in this deck are not
    letterbox-shaped, and cropping them to a band was throwing away the sky. */
 .plate { display: flex; gap: 38px; align-items: center; width: 100%; }
 .plate .pic { flex: 0 0 auto; }
-.plate .pic img, .plate .pic video {
+.reveal .slides .plate .pic img, .reveal .slides .plate .pic video {
   height: 216px; width: auto; max-width: 100%;
   display: block; object-fit: contain;
   border: 1px solid var(--rule); border-radius: 2px; background: #fff;
 }
-.plate .pic .slot { width: 314px; height: 216px; }
+.reveal .slides .plate .pic .slot { width: 314px; height: 216px; }
 .plate .pic .cap { font-size: 14px; color: var(--ink-3); margin-top: 10px; max-width: 330px; line-height: 1.5; }
 .plate .body { flex: 1; }
 
 .strip { display: flex; gap: 18px; align-items: flex-end; }
 .strip .col { flex: 1; }
-.strip .col img, .strip .col video, .strip .col .slot {
+.reveal .slides .strip .col img, .reveal .slides .strip .col video, .reveal .slides .strip .col .slot {
   width: 100%; height: 126px; object-fit: cover;
   border: 1px solid var(--rule); border-radius: 2px; display: block;
+}
+
+/* `wide` — three figures given real size.
+   Three across is width-bound, so the height has to be bought twice over:
+   the row is set 40px wider than the text measure on each side, and each
+   figure is cropped to a common 3:2 panel instead of keeping its own
+   proportions. That buys 255px -> 339px. The sides lose about a tenth of a
+   16:9 capture, which is the price of the other third of the height. */
+.strip.wide {
+  align-items: flex-start;
+  gap: 14px;
+  margin-left: -40px;
+  margin-right: -40px;
+}
+.strip.wide .col { flex: 1 1 0; min-width: 0; }
+.reveal .slides .strip.wide .col img,
+.reveal .slides .strip.wide .col video,
+.reveal .slides .strip.wide .col .slot {
+  width: 100%; height: 339px; object-fit: cover;
 }
 .strip .col .lab { font-size: 14px; color: var(--ink-2); margin-top: 8px; font-weight: 600; }
 .strip .col .lab i { font-weight: 400; color: var(--ink-4); font-style: normal; }
 
 .duo { display: flex; gap: 26px; width: 100%; align-items: flex-start; }
 .duo .col { flex: 1; }
-.duo .col img, .duo .col video, .duo .col .slot {
-  width: 100%; height: 330px; object-fit: cover;
+/* Two figures, balanced: one shape, one size, whatever the sources were.
+   16:9 is the shape screen captures already are, so it costs them least. */
+.reveal .slides .duo .col img, .reveal .slides .duo .col video, .reveal .slides .duo .col .slot {
+  width: 100%; aspect-ratio: 16 / 9; object-fit: cover;
   border: 1px solid var(--rule); border-radius: 2px; display: block;
 }
 .duo .col .cap { font-size: 15px; color: var(--ink-3); margin-top: 11px; }
 .duo .col .cap b { color: var(--ink-2); font-weight: 600; }
 
+/* `fit` — the other choice: nothing cropped. Each column takes the width its
+   own figure's proportions ask for, at a shared height, so the two still line
+   up. Use it when the crop would fight the pictures; use the plain `Duo` when
+   the row needs to balance. A caption then sits exactly as wide as its figure. */
+.duo.fit .col { flex: 0 1 auto; min-width: 0; }
+.reveal .slides .duo.fit .col img,
+.reveal .slides .duo.fit .col video {
+  height: 330px; width: auto; max-width: 100%;
+  aspect-ratio: auto; object-fit: contain;
+}
+.reveal .slides .duo.fit .col .slot { width: 560px; height: 330px; aspect-ratio: auto; }
+.duo.fit .col .cap { max-width: 100%; }
+
 .split { display: flex; gap: 44px; width: 100%; align-items: center; }
 .split .media { flex: 0 0 47%; }
-.split .media img, .split .media video, .split .media .slot {
+.reveal .slides .split .media img, .reveal .slides .split .media video, .reveal .slides .split .media .slot {
   width: 100%; height: 370px; object-fit: cover;
   border: 1px solid var(--rule); border-radius: 2px; display: block;
 }
@@ -357,7 +408,7 @@ hr.rule { border: 0; height: 1px; background: var(--rule); margin: 24px 0; width
 .body-area.has-title > .diagram { margin-top: -8px; }
 
 /* company mark on the title slide */
-.logo {
+.reveal .slides .logo {
   width: 216px; height: auto; display: block;
   margin: 40px auto 0; border: 0; background: none; box-shadow: none;
 }
