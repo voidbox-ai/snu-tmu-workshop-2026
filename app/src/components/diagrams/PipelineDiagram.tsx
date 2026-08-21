@@ -64,7 +64,7 @@ export function PipelineDiagram() {
         Millions of 3D Gaussians
       </text>
       <text x="600" y="52" className="svg-label-sm" textAnchor="middle">
-        position · shape · opacity · colour
+        position · shape · opacity · color
       </text>
       <g>
         <ellipse cx="556" cy="118" rx="26" ry="12" transform="rotate(-25 556 118)" className="svg-fill-dim" />
@@ -84,7 +84,7 @@ export function PipelineDiagram() {
 
       <path d="M 745 145 L 900 145" className="svg-stroke" markerEnd="url(#ah)" />
 
-      {/* 3 — the optimisation loop */}
+      {/* 3 — the optimization loop */}
       <text x="1010" y="26" className="svg-label" textAnchor="middle">
         Compare &amp; adjust
       </text>

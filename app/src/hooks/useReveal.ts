@@ -15,7 +15,7 @@ export interface RevealState {
 /**
  * Boot reveal.js over the sections React has already rendered.
  *
- * React owns the markup, reveal owns the behaviour. That division only holds
+ * React owns the markup, reveal owns the behavior. That division only holds
  * because the slides are static: nothing re-renders a <section> after mount,
  * so reveal's own classes (`present`, `past`, `future`) are never clobbered.
  * The one thing React does keep updating is each slide's <aside class="notes">,
@@ -50,7 +50,7 @@ export function useReveal(keyBindings: Record<string, () => void>): RevealState 
         minScale: 0.2,
         maxScale: 2.0,
 
-        center: false, // we centre with flexbox instead
+        center: false, // we center with flexbox instead
         hash: true,
         history: false,
         controls: false,

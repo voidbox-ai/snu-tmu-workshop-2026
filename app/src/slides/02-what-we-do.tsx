@@ -27,7 +27,7 @@ export default function WhatWeDo() {
         <Pull plain>
           A graduation exhibition lasts only five days.
           <br />
-          A neighbourhood is redeveloped.
+          A neighborhood is redeveloped.
         </Pull>
         <Text style={{ marginTop: 20 }}>
           The digital twin is offered as the way to keep such places. But keep{' '}

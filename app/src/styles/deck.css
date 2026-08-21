@@ -192,7 +192,7 @@ hr.rule { border: 0; height: 1px; background: var(--rule); margin: 24px 0; width
    --------------------------------------------------------- */
 
 .figure { width: 100%; }
-.figure img {
+.figure img, .figure video {
   max-width: 100%; max-height: 440px; object-fit: contain;
   display: block; margin: 0 auto;
   border: 1px solid var(--rule); border-radius: 2px;
@@ -216,9 +216,23 @@ hr.rule { border: 0; height: 1px; background: var(--rule); margin: 24px 0; width
 .slot .slot-desc { font-size: 14px; color: var(--ink-4); line-height: 1.5; max-width: 92%; }
 .figure .slot { width: 74%; height: 390px; }
 
+/* One picture shown at its own proportions — never cropped — with the
+   sentence it illustrates set beside it. The paintings in this deck are not
+   letterbox-shaped, and cropping them to a band was throwing away the sky. */
+.plate { display: flex; gap: 38px; align-items: center; width: 100%; }
+.plate .pic { flex: 0 0 auto; }
+.plate .pic img, .plate .pic video {
+  height: 216px; width: auto; max-width: 100%;
+  display: block; object-fit: contain;
+  border: 1px solid var(--rule); border-radius: 2px; background: #fff;
+}
+.plate .pic .slot { width: 314px; height: 216px; }
+.plate .pic .cap { font-size: 14px; color: var(--ink-3); margin-top: 10px; max-width: 330px; line-height: 1.5; }
+.plate .body { flex: 1; }
+
 .strip { display: flex; gap: 18px; align-items: flex-end; }
 .strip .col { flex: 1; }
-.strip .col img, .strip .col .slot {
+.strip .col img, .strip .col video, .strip .col .slot {
   width: 100%; height: 126px; object-fit: cover;
   border: 1px solid var(--rule); border-radius: 2px; display: block;
 }
@@ -227,7 +241,7 @@ hr.rule { border: 0; height: 1px; background: var(--rule); margin: 24px 0; width
 
 .duo { display: flex; gap: 26px; width: 100%; align-items: flex-start; }
 .duo .col { flex: 1; }
-.duo .col img, .duo .col .slot {
+.duo .col img, .duo .col video, .duo .col .slot {
   width: 100%; height: 330px; object-fit: cover;
   border: 1px solid var(--rule); border-radius: 2px; display: block;
 }
@@ -236,7 +250,7 @@ hr.rule { border: 0; height: 1px; background: var(--rule); margin: 24px 0; width
 
 .split { display: flex; gap: 44px; width: 100%; align-items: center; }
 .split .media { flex: 0 0 47%; }
-.split .media img, .split .media .slot {
+.split .media img, .split .media video, .split .media .slot {
   width: 100%; height: 370px; object-fit: cover;
   border: 1px solid var(--rule); border-radius: 2px; display: block;
 }

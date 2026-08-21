@@ -42,6 +42,25 @@ export function Body({ children, style }: Kids) {
   )
 }
 
+/**
+ * One picture at its own proportions, with the sentence it illustrates set
+ * beside it. Unlike `Split`, the image is never cropped to fit a band.
+ */
+export function Plate({ children, style }: Kids) {
+  return (
+    <div className="plate" style={style}>
+      {children}
+    </div>
+  )
+}
+export function Pic({ children, style }: Kids) {
+  return (
+    <div className="pic" style={style}>
+      {children}
+    </div>
+  )
+}
+
 /** Two equal columns of imagery. */
 export function Duo({ children, style }: Kids) {
   return (
@@ -218,7 +237,7 @@ export function Credit({ children }: Kids) {
   return <p className="credit">{children}</p>
 }
 
-/** The single accent colour, used inline. */
+/** The single accent color, used inline. */
 export function Acc({ children }: Kids) {
   return <span className="acc">{children}</span>
 }

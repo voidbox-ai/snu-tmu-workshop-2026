@@ -8,8 +8,8 @@ export const meta: SlideMeta = {
   sub: 'five days, one department, one graduating class',
 }
 
-/* The failure numbers deliberately carry no accent: the deck's one colour is
-   reserved for the side that survived. Colour on both would blur the point. */
+/* The failure numbers deliberately carry no accent: the deck's one color is
+   reserved for the side that survived. Color on both would blur the point. */
 export default function WhatTheLayerDid() {
   return (
     <>

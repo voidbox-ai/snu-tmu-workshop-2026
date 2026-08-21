@@ -5,7 +5,7 @@ Hyeogjin Noh · [voidbox](https://nubim.voidbox.ai) · SNU × TMU Annual Worksho
 
 A 14-minute talk reporting on two projects: a graduation exhibition run
 simultaneously in a physical hall and in a 3D Gaussian Splatting scan of that
-hall, and a rural school being remodelled where the same scan became a design
+hall, and a rural school being remodeled where the same scan became a design
 instrument instead of an exhibit.
 
 The short version of the finding: we built a two-way interaction layer to make

@@ -1,5 +1,5 @@
-<p>Very briefly, how the technology works — because one property of it drives everything that follows.</p>
-<p>Alberti gave European painting a space constructed from a single fixed point. Cézanne stopped obeying that, and built his mountain out of many separate glances held on one canvas. 3DGS does something close to the second: it optimises a space out of thousands of them.</p>
-<p>Concretely: you walk through a space with a camera. Structure-from-motion estimates where each photograph was taken. The system then fits a cloud of translucent ellipsoids — Gaussians — each with a position, a shape, an opacity, and a colour that changes with viewing direction. It renders that cloud from a known camera, compares it to the real photograph, and adjusts. Tens of thousands of times.</p>
-<p>Note what is absent. No mesh. No surfaces. No geometry. It reconstructs how a place looks, not what it is made of.</p>
-<span class="cue">[45초. 유일한 기술 설명. 빠르게 지나가되 마지막 문장은 또렷하게.]</span>
+<p>Very briefly, how 3D Gaussian Splatting works.</p>
+    <p>The premise is simple: photograph one object from many directions, and its three-dimensional form can be estimated. Cézanne built his mountain the same way — not from a single fixed viewpoint, but out of many separate glances held on one canvas. 3DGS does something close to that, with thousands of them, optimized.</p>
+    <p>Concretely: you walk through a space with a camera. Structure-from-motion estimates where each photograph was taken. The system then fits a cloud of translucent ellipsoids — Gaussians — each with a position, a shape, an opacity, and a color that changes with viewing direction. It renders that cloud from a known camera, compares it to the real photograph, and adjusts. Tens of thousands of times.</p>
+    <p>In the 3DGS output data — no mesh. No surfaces. No geometry. It reconstructs how a place looks, not what it is made of.</p>
+    <span class="cue">[45초. 유일한 기술 설명. 빠르게 지나가되 마지막 문장은 또렷하게.]</span>

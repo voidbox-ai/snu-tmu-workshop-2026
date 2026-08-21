@@ -57,7 +57,7 @@ Today I want to report on one attempt to answer that. And I should say at the st
 **Visual:** 파이프라인 다이어그램 (제작 예정)
 
 > **1 · Input** — thousands of photographs; camera positions estimated by structure-from-motion
-> **2 · Representation** — millions of translucent 3D ellipsoids: position, shape, opacity, and colour that changes with viewing direction
+> **2 · Representation** — millions of translucent 3D ellipsoids: position, shape, opacity, and color that changes with viewing direction
 > **3 · Optimization** — render from a known camera, compare against the real photograph, adjust, repeat
 
 **Script**

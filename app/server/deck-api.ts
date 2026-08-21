@@ -148,11 +148,20 @@ export interface SlotInfo {
   format?: string
 }
 
-const SLOT_BLOCK = /<ImageSlot\b[\s\S]*?\/>/g
-const SLOT_NAME = /\bslot=(?:"([^"]*)"|\{'([^']*)'\}|\{"([^"]*)"\})/
-const SLOT_DESC = /\bdesc=(?:"([^"]*)"|\{'([^']*)'\}|\{"([^"]*)"\})/
+/* Which prop on which component names a *picture*.
+   For <VideoSlot> that is `poster`, not `slot`: the poster is a still the deck
+   asks for and should be droppable on the images page, while the video file
+   itself is not — copy that into public/assets/ by hand. */
+const PICTURE_PROPS: [RegExp, string][] = [
+  [/<ImageSlot\b[\s\S]*?\/>/g, 'slot'],
+  [/<VideoSlot\b[\s\S]*?\/>/g, 'poster'],
+]
 
-function firstGroup(m: RegExpMatchArray | null): string {
+/** `name="x"`, `name={'x'}` or `name={"x"}` — the forms we author. */
+function attr(source: string, name: string): string {
+  const m = source.match(
+    new RegExp(`\\b${name}=(?:"([^"]*)"|\\{'([^']*)'\\}|\\{"([^"]*)"\\})`),
+  )
   if (!m) return ''
   return m[1] ?? m[2] ?? m[3] ?? ''
 }
@@ -164,14 +173,16 @@ async function listSlots(): Promise<SlotInfo[]> {
 
   for (const [i, file] of files.entries()) {
     const source = await fs.readFile(path.join(SLIDE_DIR, file), 'utf8')
-    for (const block of source.match(SLOT_BLOCK) ?? []) {
-      const name = firstGroup(block.match(SLOT_NAME))
-      if (!name) continue
-      const desc = firstGroup(block.match(SLOT_DESC))
-      const entry = slots.get(name) ?? { name, desc, slides: [] }
-      if (!entry.desc && desc) entry.desc = desc
-      if (!entry.slides.includes(i + 1)) entry.slides.push(i + 1)
-      slots.set(name, entry)
+    for (const [pattern, prop] of PICTURE_PROPS) {
+      for (const block of source.match(pattern) ?? []) {
+        const name = attr(block, prop)
+        if (!name) continue
+        const desc = attr(block, 'desc')
+        const entry = slots.get(name) ?? { name, desc, slides: [] }
+        if (!entry.desc && desc) entry.desc = desc
+        if (!entry.slides.includes(i + 1)) entry.slides.push(i + 1)
+        slots.set(name, entry)
+      }
     }
   }
 

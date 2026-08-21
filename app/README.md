@@ -1,6 +1,6 @@
 # Presence Before Synchronization — React + TypeScript
 
-SNU × TMU Annual Workshop · 20 슬라이드 + 백업 3장 · 13:50 계획 · reveal.js 5.1.0
+SNU × TMU Annual Workshop · 19 슬라이드 + 백업 4장 · 13:35 계획 · reveal.js 5.1.0
 
 발표 엔진은 **그대로 reveal.js**입니다. 바뀐 것은 슬라이드를 담는 방식뿐입니다 —
 44KB짜리 `index.html` 하나였던 것이 슬라이드 한 장에 파일 한 쌍으로 갈라졌습니다.
@@ -75,12 +75,18 @@ export default function WhatTheLayerDid() {
 
 ### 자주 쓰는 조각
 
-`components/layout.tsx` 에 있는 것들 — `Split`/`Media`/`Body`, `Duo`, `Strip`, `Stats`/`Stat`,
-`Lessons`/`Lesson`, `Pull`, `List`, `Rule`, `Text`, `Note`, `Diagram`. deck.css 의 클래스에
+`components/layout.tsx` 에 있는 것들 — `Split`/`Media`/`Body`, `Plate`/`Pic`, `Duo`, `Strip`,
+`Stats`/`Stat`, `Lessons`/`Lesson`, `Pull`, `List`, `Rule`, `Text`, `Note`, `Diagram`. deck.css 의 클래스에
 이름을 붙인 얇은 껍데기라, 슬라이드 파일이 div 더미가 아니라 구조로 읽힙니다.
 
 도판은 `<ImageSlot slot="assets/x.jpg" desc="어떤 사진인지" />`. 파일이 아직 없으면
 **파일 경로와 설명이 적힌 점선 자리표시자**로 대체되므로, 사진 없이도 발표가 됩니다.
+
+영상은 `<VideoSlot slot="assets/x.mp4" poster="assets/x.jpg" desc="…" />`.
+슬라이드에 들어오면 **자동으로 재생되고 나가면 멈춥니다** (무음·루프, reveal이 처리).
+**영상 → 포스터 스틸 → 점선 자리표시자** 순으로 물러나므로 mp4가 아직 없어도 발표가 됩니다.
+지금은 슬라이드 4(놀이터 스캔)가 이 방식입니다 — `public/assets/playground.mp4` 를 넣으면
+영상으로, 없으면 지금처럼 `playground.jpg` 로 나옵니다.
 
 ---
 
@@ -101,7 +107,7 @@ export default function WhatTheLayerDid() {
 
 ## 이미지 넣기
 
-dev 서버를 띄운 뒤 **<http://localhost:8000/images.html>** 을 엽니다. 12개 칸에
+dev 서버를 띄운 뒤 **<http://localhost:8000/images.html>** 을 엽니다. 10개 칸에
 **사진을 끌어다 놓기만 하면** 슬라이드가 찾는 이름으로 저장됩니다.
 
 칸 목록은 `src/slides/*.tsx` 의 `<ImageSlot>` 에서 직접 읽어오므로, 슬라이드에 도판을
@@ -111,6 +117,10 @@ dev 서버를 띄운 뒤 **<http://localhost:8000/images.html>** 을 엽니다. 
 - 교체·삭제된 사진은 `public/assets/_replaced/` 로 옮겨집니다 (지워지지 않습니다)
 - 아직 어디 쓸지 안 정한 사진은 `public/assets/_pool/` 에 통째로 복사해 넣고 새로고침
 - iPhone HEIC는 브라우저가 못 읽어 거부됩니다 — JPEG로 내보내 주세요
+
+**영상은 이 페이지로 못 넣습니다.** `public/assets/` 에 직접 복사하세요.
+H.264 mp4를 쓰고(브라우저가 가장 확실하게 재생합니다), **GitHub 파일당 100MB 제한**이
+있으니 필요한 구간만 잘라 압축해 주세요. 포스터 스틸은 이 페이지에서 그대로 넣으면 됩니다.
 
 가장 급한 두 장은 `playground.jpg`(슬라이드 4·19)와 `munsan-overlay.jpg`(슬라이드 17)입니다.
 
@@ -137,7 +147,7 @@ dev 서버를 띄운 뒤 **<http://localhost:8000/images.html>** 을 엽니다. 
 페이스 표시줄 읽는 법:
 
 ```
-04:12   +0:18 behind   Findings · 14/20 · plan 13:50
+04:12   +0:18 behind   Findings · 14/19 · plan 13:35
 ```
 
 경과 시간 / 이 슬라이드에 도착했어야 할 시각 대비 지연 (초록 = 여유, 빨강 = 20초 이상 지연) /
@@ -153,10 +163,13 @@ dev 서버를 띄운 뒤 **<http://localhost:8000/images.html>** 을 엽니다. 
 | Yonsei | Case 1 — one exhibition, run in two places at once | 5–8 | 2:30 |
 | Findings | What failed, what survived, and what we take from it | 9–14 | 4:45 |
 | Munsan | Case 2 — the same scan, a different user | 15–18 | 2:45 |
-| Next | Next | 19–20 | 0:50 |
+| Next | Next | 19 | 0:35 |
 
-백업 슬라이드 3장(Husserl / Borges / Archive–Repertoire)이 20번 뒤에 있습니다.
-번호와 타이머에서 제외되어 있고, Q&A 때만 넘겨서 쓰면 됩니다.
+본편은 19번 "Where this leaves us" 에서 끝납니다.
+
+그 뒤 **백업 4장**(For discussion / Husserl / Borges / Archive–Repertoire)은
+슬라이드 번호와 타이머에서 제외되어 있습니다. Q&A 때만 넘겨서 쓰면 되고,
+그냥 두면 발표는 19번에서 마무리됩니다.
 
 ## 파일
 
@@ -179,15 +192,17 @@ app/
 │   │   ├── 01-title.tsx                     화면
 │   │   ├── 01-title.notes.html              대본
 │   │   ├── 02-what-we-do.tsx  ·  .notes.html
-│   │   ├── …                                (03 – 20, 같은 규칙)
-│   │   ├── 21-backup-husserl.*              ┐
-│   │   ├── 22-backup-borges.*               ├ 백업 (번호·타이머에서 제외)
+│   │   ├── …                                (03 – 19, 같은 규칙)
+│   │   ├── 20-backup-for-discussion.*       ┐
+│   │   ├── 21-backup-husserl.*              ├ 백업 4장
+│   │   ├── 22-backup-borges.*               │ (번호·타이머에서 제외)
 │   │   └── 23-backup-archive-repertoire.*   ┘
 │   │
 │   ├── components/
 │   │   ├── SlideSection.tsx    상단 인덱스 바 + 제목 + 본문 래퍼 + 노트 블록
 │   │   ├── layout.tsx          Split · Duo · Strip · Stats · Lessons · Pull · List …
 │   │   ├── ImageSlot.tsx       도판 — 파일이 없으면 점선 자리표시자로 대체
+│   │   ├── VideoSlot.tsx       영상 — 자동재생·무음·루프, 없으면 포스터로 후퇴
 │   │   ├── PaceBar.tsx         왼쪽 아래 페이스 표시줄 (T)
 │   │   ├── NotesOverlay.tsx    화면 내 노트 패널 (I)
 │   │   ├── HelpBar.tsx         단축키 바 (?)
