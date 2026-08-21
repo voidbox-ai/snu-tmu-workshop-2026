@@ -33,7 +33,10 @@
   --accent:      #2a78d6;
   --accent-wash: #e6eff9;
 
-  --font: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  /* Pretendard carries Latin and Hangul; the Japanese gloss on slide 8 falls
+     through to whatever the presenting machine has for kanji. */
+  --font: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic',
+          'Yu Gothic UI', 'Yu Gothic', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
   --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 }
 

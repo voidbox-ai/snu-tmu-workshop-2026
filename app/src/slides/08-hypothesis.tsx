@@ -1,5 +1,5 @@
 import type { SlideMeta } from '../types'
-import { Cap, Diagram } from '../components/layout'
+import { Diagram, Pull } from '../components/layout'
 import { CouplingDiagram } from '../components/diagrams/CouplingDiagram'
 
 export const meta: SlideMeta = {
@@ -13,10 +13,13 @@ export default function Hypothesis() {
   return (
     <Diagram>
       <CouplingDiagram />
-      <Cap style={{ marginTop: 16 }}>
+      {/* This sentence is the hypothesis the whole Yonsei section turns on, and
+          slides 9 and 10 answer it. It carries the weight of a claim, not of a
+          caption. */}
+      <Pull style={{ marginTop: 26 }}>
         If the two spaces act on each other they become one event; if they become one event, the
-        online and offline participants become one community. <b>That was the bet.</b>
-      </Cap>
+        online and offline participants become one community. That was our bet.
+      </Pull>
     </Diagram>
   )
 }

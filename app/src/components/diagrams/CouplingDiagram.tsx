@@ -43,8 +43,9 @@ export function CouplingDiagram() {
       <text x="200" y="24" className="svg-label" textAnchor="middle">
         Metaverse
       </text>
-      <text x="200" y="50" className="svg-label-sm" textAnchor="middle" fontStyle="italic">
-        an alternative space
+      <text x="200" y="50" className="svg-label-sm" textAnchor="middle">
+        <tspan fontStyle="italic">an alternative space</tspan>
+        <tspan fontStyle="normal"> (代替空間)</tspan>
       </text>
       <circle cx="128" cy="140" r="48" className="svg-stroke" />
       <circle cx="272" cy="140" r="48" className="svg-stroke" />
@@ -64,8 +65,9 @@ export function CouplingDiagram() {
       <text x="600" y="24" className="svg-label" textAnchor="middle">
         Digital twin
       </text>
-      <text x="600" y="50" className="svg-label-sm" textAnchor="middle" fontStyle="italic">
-        a mirror space
+      <text x="600" y="50" className="svg-label-sm" textAnchor="middle">
+        <tspan fontStyle="italic">a mirror space</tspan>
+        <tspan fontStyle="normal"> (鏡像空間)</tspan>
       </text>
       <circle cx="528" cy="140" r="48" className="svg-stroke" />
       <circle cx="672" cy="140" r="48" className="svg-stroke" />
@@ -84,8 +86,12 @@ export function CouplingDiagram() {
       <text x="1000" y="24" className="svg-label-acc" textAnchor="middle">
         Space Sync
       </text>
-      <text x="1000" y="50" className="svg-label-sm" textAnchor="middle" fontStyle="italic">
-        causal coupling
+      {/* All three subtitles carry a Japanese gloss, for the Tokyo half of the
+          room. The kanji stay upright: a synthetic oblique on CJK is not
+          italic, it is just skewed. */}
+      <text x="1000" y="50" className="svg-label-sm" textAnchor="middle">
+        <tspan fontStyle="italic">causal coupling</tspan>
+        <tspan fontStyle="normal"> (因果的結合)</tspan>
       </text>
       <circle cx="928" cy="140" r="48" className="svg-stroke-acc" />
       <circle cx="1072" cy="140" r="48" className="svg-stroke-acc" />
