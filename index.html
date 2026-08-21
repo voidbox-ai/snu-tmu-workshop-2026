@@ -3,15 +3,37 @@
 <head>
 <meta charset="utf-8">
 <title>Presence Before Synchronization — voidbox</title>
-<meta http-equiv="refresh" content="0; url=deck/">
-<link rel="canonical" href="deck/">
+<!--
+  This file is not what GitHub Pages serves any more.
+
+  Pages is built by .github/workflows/deploy.yml, which publishes app/dist as
+  the site root (and copies deck/ alongside it at /deck/). This page only shows
+  up if someone opens the repository folder itself, so it just points the way.
+-->
 <style>
   body { font-family: system-ui, sans-serif; background:#fcfcfb; color:#52514e;
-         display:grid; place-items:center; height:100vh; margin:0; }
+         display:grid; place-items:center; height:100vh; margin:0; line-height:1.7; }
+  div { max-width: 34em; padding: 0 2em; }
   a { color:#2a78d6; }
+  code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.9em; }
 </style>
 </head>
 <body>
-  <p>Opening the slides… <a href="deck/">deck/</a></p>
+  <div>
+    <p><strong>Presence Before Synchronization</strong></p>
+    <p>
+      The slides live in <a href="app/"><code>app/</code></a> and are built with
+      Vite — run <code>npm install &amp;&amp; npm run dev</code> in that folder,
+      or double-click <code>app/start-presentation.bat</code>.
+    </p>
+    <p>
+      Published copy:
+      <a href="https://voidbox-ai.github.io/snu-tmu-workshop-2026/">voidbox-ai.github.io/snu-tmu-workshop-2026</a>
+    </p>
+    <p>
+      The original single-file reveal.js deck is still in
+      <a href="deck/"><code>deck/</code></a>, frozen as a fallback.
+    </p>
+  </div>
 </body>
 </html>

@@ -1,0 +1,349 @@
+/* =========================================================
+   Presence Before Synchronization — voidbox
+   SNU x TMU Annual Workshop
+
+   Light research-talk register: paper surface, ink type,
+   one accent reserved for the surviving/online thread.
+   Accent #2a78d6 validated on surface #fcfcfb (light).
+   ========================================================= */
+
+@font-face {
+  font-family: 'Pretendard';
+  src: local('Pretendard Variable'), local('Pretendard'),
+       url('../assets/fonts/PretendardVariable.woff2') format('woff2-variations');
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* React mounts here. `display: contents` keeps the wrapper out of the layout
+   so `.reveal` behaves exactly as it does in a hand-written reveal.js page. */
+#root { display: contents; }
+
+:root {
+  --surface:   #fcfcfb;
+  --ink:       #111110;
+  --ink-2:     #52514e;
+  --ink-3:     #85837c;
+  --ink-4:     #a9a7a0;
+  --rule:      #e2e1db;
+  --rule-2:    #cfcec7;
+
+  /* the only chromatic slot: the virtual exhibition, and what it did */
+  --accent:      #2a78d6;
+  --accent-wash: #e6eff9;
+
+  --font: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+.reveal-viewport { background: var(--surface); }
+
+.reveal-viewport,
+.reveal {
+  --r-main-font: var(--font);
+  --r-heading-font: var(--font);
+  --r-code-font: var(--font-mono);
+  font-family: var(--font);
+  font-weight: 400;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.reveal h1, .reveal h2, .reveal h3, .reveal h4,
+.reveal p, .reveal li, .reveal span, .reveal div,
+.reveal text, .reveal button, .reveal input, .reveal textarea {
+  font-family: var(--font);
+}
+
+.reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+  text-transform: none;
+  letter-spacing: -0.015em;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+  color: var(--ink);
+  text-shadow: none;
+}
+.reveal p { margin: 0; line-height: 1.55; }
+.reveal em { font-style: italic; color: inherit; }
+.reveal strong { font-weight: 700; color: var(--ink); }
+
+.reveal .slides { text-align: left; }
+.reveal .slides > section {
+  height: 100%;
+  padding: 40px 64px 46px;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+/* ---------------------------------------------------------
+   section index bar — injected by presenter.js
+   --------------------------------------------------------- */
+
+.topbar { position: absolute; top: 34px; left: 64px; right: 64px; }
+/* a running head: which part of the talk this slide belongs to */
+.secnav {
+  display: flex; align-items: baseline;
+  border-bottom: 1px solid var(--rule); padding-bottom: 10px;
+}
+.secnav .cur {
+  font-size: 17px; letter-spacing: 0.005em; color: var(--ink-3);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.slide-title {
+  font-size: 27px; font-weight: 700;
+  margin-top: 20px !important; letter-spacing: -0.01em;
+}
+.slide-title .sub {
+  font-weight: 400; color: var(--ink-3); font-size: 21px; margin-left: 12px;
+}
+
+.body-area {
+  display: flex; flex-direction: column; justify-content: center;
+  height: 100%; padding-top: 84px; box-sizing: border-box;
+}
+.body-area.has-title { padding-top: 132px; }
+
+.center-stack {
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  text-align: center; height: 100%;
+}
+
+hr.rule { border: 0; height: 1px; background: var(--rule); margin: 24px 0; width: 100%; }
+
+/* ---------------------------------------------------------
+   type
+   --------------------------------------------------------- */
+
+.t-title   { font-size: 58px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.12; }
+.t-sub     { font-size: 25px; color: var(--ink-2); font-weight: 400; }
+.t-lead    { font-size: 30px; font-weight: 600; line-height: 1.38; letter-spacing: -0.01em; }
+.t-body    { font-size: 21px; color: var(--ink-2); line-height: 1.62; }
+.t-body-lg { font-size: 24px; color: var(--ink-2); line-height: 1.6; }
+.t-cap     { font-size: 15px; color: var(--ink-3); line-height: 1.5; }
+.t-note    { font-size: 18px; color: var(--ink-3); font-style: italic; line-height: 1.55; }
+
+.dim { color: var(--ink-2); }
+.muted { color: var(--ink-3); }
+.faint { color: var(--ink-4); }
+.acc { color: var(--accent); }
+
+.pull {
+  border-left: 3px solid var(--accent);
+  padding: 3px 0 3px 22px;
+  font-size: 26px; font-weight: 600; line-height: 1.42; letter-spacing: -0.01em;
+}
+.pull.plain { border-left-color: var(--rule-2); font-weight: 400; color: var(--ink-2); font-size: 23px; }
+
+/* ---------------------------------------------------------
+   stat tiles
+   --------------------------------------------------------- */
+
+.stats { display: flex; gap: 56px; align-items: flex-start; }
+.stats.wide { gap: 82px; }
+.stat { flex: 0 0 auto; }
+.stat .v {
+  font-size: 76px; font-weight: 800; line-height: 1;
+  letter-spacing: -0.035em; font-variant-numeric: tabular-nums; color: var(--ink);
+}
+.stat .v.sm { font-size: 58px; }
+.stat.on .v { color: var(--accent); }
+.stat .k {
+  font-size: 16px; color: var(--ink-3); margin-top: 14px;
+  line-height: 1.45; max-width: 210px;
+}
+.stat .k b { color: var(--ink-2); font-weight: 600; }
+
+/* ---------------------------------------------------------
+   lists
+   --------------------------------------------------------- */
+
+.reveal ul.plain { list-style: none; margin: 0; padding: 0; width: 100%; }
+.reveal ul.plain li {
+  font-size: 21px; color: var(--ink-2); line-height: 1.6;
+  padding: 0 0 0 26px; margin: 0 0 20px 0; position: relative;
+}
+.reveal ul.plain li::before {
+  content: ""; position: absolute; left: 0; top: 13px;
+  width: 11px; height: 1px; background: var(--rule-2);
+}
+.reveal ul.plain li strong { color: var(--ink); }
+.reveal ul.plain li:last-child { margin-bottom: 0; }
+.reveal ul.plain li.on::before { background: var(--accent); height: 2px; }
+
+.lessons { width: 100%; }
+.lesson {
+  display: grid; grid-template-columns: 46px 1fr; gap: 0 20px;
+  margin-bottom: 26px; align-items: start;
+}
+.lesson:last-child { margin-bottom: 0; }
+.lesson .n {
+  font-size: 21px; font-weight: 700; color: var(--ink-4);
+  line-height: 1.35; font-variant-numeric: tabular-nums;
+}
+.lesson .h { font-size: 25px; font-weight: 700; line-height: 1.3; margin-bottom: 7px; }
+.lesson .d { font-size: 19px; color: var(--ink-2); line-height: 1.55; }
+
+/* ---------------------------------------------------------
+   figures
+   --------------------------------------------------------- */
+
+.figure { width: 100%; }
+.figure img {
+  max-width: 100%; max-height: 440px; object-fit: contain;
+  display: block; margin: 0 auto;
+  border: 1px solid var(--rule); border-radius: 2px;
+  box-shadow: none; background: #fff;
+}
+.figure .cap { font-size: 15px; color: var(--ink-3); margin-top: 13px; line-height: 1.5; }
+.figure .cap b { color: var(--ink-2); font-weight: 600; }
+
+.slot {
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  border: 1px dashed var(--rule-2); border-radius: 2px;
+  background: #f4f4f1; color: var(--ink-4); text-align: center;
+  padding: 20px; box-sizing: border-box; margin: 0 auto;
+}
+.slot .slot-file {
+  /* deliberately monospace — a file path, and it only shows while an asset
+     is still missing. It never appears during the talk. */
+  font-family: var(--font-mono);
+  font-size: 14px; color: var(--ink-3); margin-bottom: 7px; word-break: break-all;
+}
+.slot .slot-desc { font-size: 14px; color: var(--ink-4); line-height: 1.5; max-width: 92%; }
+.figure .slot { width: 74%; height: 390px; }
+
+.strip { display: flex; gap: 18px; align-items: flex-end; }
+.strip .col { flex: 1; }
+.strip .col img, .strip .col .slot {
+  width: 100%; height: 126px; object-fit: cover;
+  border: 1px solid var(--rule); border-radius: 2px; display: block;
+}
+.strip .col .lab { font-size: 14px; color: var(--ink-2); margin-top: 8px; font-weight: 600; }
+.strip .col .lab i { font-weight: 400; color: var(--ink-4); font-style: normal; }
+
+.duo { display: flex; gap: 26px; width: 100%; align-items: flex-start; }
+.duo .col { flex: 1; }
+.duo .col img, .duo .col .slot {
+  width: 100%; height: 330px; object-fit: cover;
+  border: 1px solid var(--rule); border-radius: 2px; display: block;
+}
+.duo .col .cap { font-size: 15px; color: var(--ink-3); margin-top: 11px; }
+.duo .col .cap b { color: var(--ink-2); font-weight: 600; }
+
+.split { display: flex; gap: 44px; width: 100%; align-items: center; }
+.split .media { flex: 0 0 47%; }
+.split .media img, .split .media .slot {
+  width: 100%; height: 370px; object-fit: cover;
+  border: 1px solid var(--rule); border-radius: 2px; display: block;
+}
+.split .media .cap { font-size: 14px; color: var(--ink-3); margin-top: 10px; }
+.split .body { flex: 1; }
+
+/* ---------------------------------------------------------
+   svg diagrams
+   --------------------------------------------------------- */
+
+.diagram { width: 100%; }
+.diagram svg { width: 100%; height: auto; max-height: 400px; display: block; }
+.diagram .cap { font-size: 15px; color: var(--ink-3); margin-top: 12px; }
+
+.svg-label    { fill: #111110; font-size: 21px; font-weight: 700; }
+.svg-label-sm { fill: #52514e; font-size: 17px; font-weight: 400; }
+.svg-label-xs { fill: #85837c; font-size: 15px; font-weight: 400; }
+.svg-label-acc { fill: #2a78d6; font-size: 21px; font-weight: 700; }
+.svg-stroke     { stroke: #111110; stroke-width: 1.5; fill: none; }
+.svg-stroke-dim { stroke: #cfcec7; stroke-width: 1.3; fill: none; }
+.svg-stroke-acc { stroke: #2a78d6; stroke-width: 1.8; fill: none; }
+.svg-fill       { fill: #111110; }
+.svg-fill-dim   { fill: #d8d7d0; }
+.svg-fill-acc   { fill: #2a78d6; }
+.svg-fill-wash  { fill: #e6eff9; }
+
+/* ---------------------------------------------------------
+   footer chrome
+   --------------------------------------------------------- */
+
+.reveal .slide-number,
+.reveal .slide-number a {
+  background: none; color: var(--ink-4); font-size: 15px;
+  font-family: var(--font); font-variant-numeric: tabular-nums;
+  right: 22px; bottom: 16px;
+}
+.reveal .progress { height: 2px; color: var(--accent); }
+.credit {
+  position: absolute; bottom: 20px; left: 64px; right: 140px;
+  font-size: 13px; color: var(--ink-4); line-height: 1.5;
+}
+
+/* ---------------------------------------------------------
+   presenter aids
+   --------------------------------------------------------- */
+
+#pace {
+  position: fixed; left: 18px; bottom: 14px; z-index: 60;
+  display: none; align-items: baseline; gap: 14px;
+  font-family: var(--font); font-variant-numeric: tabular-nums;
+  font-size: 17px; color: var(--ink-4); pointer-events: none;
+}
+#pace.on { display: flex; }
+#pace .clock { color: var(--ink-2); font-size: 22px; }
+#pace .delta.ahead  { color: #1b7f4d; }
+#pace .delta.behind { color: #b3352f; }
+#pace .sec { color: var(--ink-4); }
+
+#notesOverlay {
+  position: fixed; right: 0; top: 0; bottom: 0;
+  width: 33vw; max-width: 560px; z-index: 55;
+  background: #fff; border-left: 1px solid var(--rule-2);
+  padding: 34px 30px; overflow-y: auto; display: none;
+  font-size: 16px; line-height: 1.65; color: var(--ink-2);
+  box-sizing: border-box;
+}
+#notesOverlay.on { display: block; }
+#notesOverlay h4 {
+  font-size: 12px; letter-spacing: 0.16em; color: var(--ink-4);
+  margin: 0 0 16px 0; font-weight: 700;
+}
+#notesOverlay p { margin: 0 0 13px 0; }
+#notesOverlay .cue {
+  color: #8a6d1f; font-style: italic; font-size: 14px; display: block;
+  margin: 12px 0; padding-left: 11px; border-left: 2px solid #e4d8ae;
+}
+
+#helpBar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 70;
+  background: #fff; border-top: 1px solid var(--rule-2);
+  padding: 18px 34px; display: none;
+  font-family: var(--font); font-size: 16px; color: var(--ink-2);
+  justify-content: center; gap: 34px; flex-wrap: wrap;
+}
+#helpBar.on { display: flex; }
+#helpBar kbd {
+  font-family: var(--font); font-weight: 600;
+  background: #f0f0ec; border: 1px solid var(--rule-2);
+  border-radius: 3px; padding: 2px 8px; color: var(--ink); margin-right: 8px;
+}
+
+@media print {
+  #pace, #notesOverlay, #helpBar { display: none !important; }
+}
+
+/* reveal's theme sets .reveal h1/h2 sizes with higher specificity than a
+   bare class — scope the injected header's heading to win. */
+.reveal .slide-title { font-size: 27px; line-height: 1.25; }
+.reveal .slide-title .sub { font-size: 20px; }
+.reveal .center-stack .t-title { font-size: 58px; }
+
+/* tighten the gap between the header and a diagram-only slide */
+.body-area.has-title { padding-top: 122px; }
+.body-area.has-title > .diagram { margin-top: -8px; }
+
+/* company mark on the title slide */
+.logo {
+  width: 216px; height: auto; display: block;
+  margin: 40px auto 0; border: 0; background: none; box-shadow: none;
+}

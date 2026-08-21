@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.backups/
+public/assets/_replaced/
+
+# scratch used while porting
+shot.mjs
+fontcheck.mjs
+imgcheck.mjs

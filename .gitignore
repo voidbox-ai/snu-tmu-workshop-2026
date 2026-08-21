@@ -7,6 +7,11 @@ __pycache__/
 *.pyc
 node_modules/
 package-lock.json
+dist/
+
+# ...but the app's lockfile IS versioned: the deploy workflow runs `npm ci`,
+# which refuses to install without it.
+!app/package-lock.json
 
 # leftovers from a failed setup attempt
 _to_delete/

@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이미지 넣기 — Presence Before Synchronization</title>
+<style>
+  @font-face {
+    font-family: 'Pretendard';
+    src: local('Pretendard Variable'), local('Pretendard'),
+         url('fonts/PretendardVariable.woff2') format('woff2-variations');
+    font-weight: 45 920; font-style: normal; font-display: swap;
+  }
+  :root {
+    --surface:#fcfcfb; --card:#ffffff;
+    --ink:#111110; --ink-2:#52514e; --ink-3:#85837c; --ink-4:#a9a7a0;
+    --rule:#e2e1db; --rule-2:#cfcec7;
+    --accent:#2a78d6; --accent-wash:#e6eff9;
+    --ok:#1b7f4d; --bad:#b3352f;
+    --font:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    --mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin:0; background:var(--surface); color:var(--ink);
+    font-family:var(--font); -webkit-font-smoothing:antialiased;
+  }
+  .wrap { max-width:1180px; margin:0 auto; padding:46px 30px 90px; }
+
+  header h1 { font-size:30px; font-weight:800; letter-spacing:-0.02em; margin:0 0 10px; }
+  header p { font-size:16px; color:var(--ink-2); line-height:1.65; margin:0 0 6px; max-width:760px; }
+  header .links { margin-top:18px; font-size:15px; }
+  header .links a { color:var(--accent); text-decoration:none; font-weight:600; }
+  header .links a:hover { text-decoration:underline; }
+  hr { border:0; height:1px; background:var(--rule); margin:30px 0; }
+
+  /* bulk drop */
+  #bulk {
+    border:1.5px dashed var(--rule-2); border-radius:6px; background:#fff;
+    padding:24px; text-align:center; color:var(--ink-3); font-size:15px;
+    transition:border-color .12s, background .12s; cursor:pointer;
+  }
+  #bulk.hot { border-color:var(--accent); background:var(--accent-wash); color:var(--accent); }
+  #bulk b { color:var(--ink-2); font-weight:600; }
+
+  /* pool tray */
+  .sect-h { display:flex; align-items:baseline; gap:12px; margin:34px 0 12px; }
+  .sect-h h2 { font-size:19px; font-weight:700; margin:0; letter-spacing:-0.01em; }
+  .sect-h .n { font-size:14px; color:var(--ink-3); }
+  .sect-h .act { margin-left:auto; display:flex; gap:7px; }
+
+  #poolTray {
+    display:flex; gap:11px; overflow-x:auto; padding:14px;
+    background:#fff; border:1px solid var(--rule); border-radius:6px;
+    min-height:132px; align-items:flex-start;
+  }
+  #poolTray.hot { border-color:var(--accent); background:var(--accent-wash); }
+  #poolTray .none { color:var(--ink-4); font-size:14px; margin:auto; text-align:center; line-height:1.7; }
+  .pit { flex:0 0 auto; width:126px; cursor:grab; position:relative; }
+  .pit img {
+    width:126px; height:88px; object-fit:cover; display:block;
+    border:2px solid transparent; border-radius:4px; background:#f0efec;
+  }
+  .pit.sel img { border-color:var(--accent); }
+  .pit.bad img { opacity:.4; }
+  .pit .fn {
+    font-size:11px; color:var(--ink-3); margin-top:5px; line-height:1.35;
+    word-break:break-all; max-height:29px; overflow:hidden;
+  }
+  .pit .warn { font-size:11px; color:var(--bad); margin-top:3px; }
+  .pit .x {
+    position:absolute; top:3px; right:3px; width:19px; height:19px; line-height:17px;
+    text-align:center; border-radius:50%; background:rgba(255,255,255,.92);
+    border:1px solid var(--rule-2); color:var(--ink-3); font-size:13px;
+    cursor:pointer; opacity:0; transition:opacity .12s;
+  }
+  .pit:hover .x { opacity:1; }
+  .pit .x:hover { color:var(--bad); border-color:var(--bad); }
+
+  .hint {
+    font-size:13px; color:var(--accent); background:var(--accent-wash);
+    border-radius:4px; padding:8px 12px; margin-top:10px; display:none;
+  }
+  .hint.on { display:block; }
+  body.picking .card { cursor:copy; }
+  body.picking .card:hover { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-wash); }
+
+  .counts { font-size:15px; color:var(--ink-3); margin:26px 0 14px; }
+  .counts b { color:var(--ink); font-weight:700; }
+
+  /* cards */
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:20px; }
+  .card {
+    background:var(--card); border:1px solid var(--rule); border-radius:6px;
+    overflow:hidden; display:flex; flex-direction:column;
+  }
+  .card.hot { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-wash); }
+  .card.filled { border-color:var(--rule-2); }
+
+  .drop {
+    height:186px; background:#f6f6f3; border-bottom:1px solid var(--rule);
+    display:flex; align-items:center; justify-content:center;
+    position:relative; cursor:pointer; overflow:hidden;
+  }
+  .drop img { width:100%; height:100%; object-fit:cover; display:block; }
+  .drop .empty { font-size:14px; color:var(--ink-4); text-align:center; padding:0 20px; line-height:1.6; }
+  .drop .empty span { display:block; font-size:22px; color:var(--rule-2); margin-bottom:8px; }
+  .card.hot .drop { background:var(--accent-wash); }
+
+  .meta { padding:15px 16px 16px; flex:1; display:flex; flex-direction:column; }
+  .fname { font-family:var(--mono); font-size:13px; color:var(--ink-2); word-break:break-all; }
+  .desc { font-size:14px; color:var(--ink-3); line-height:1.55; margin-top:8px; flex:1; }
+  .where { font-size:12px; color:var(--ink-4); margin-top:10px; }
+  .where b { color:var(--ink-3); font-weight:600; }
+
+  .row { display:flex; gap:7px; margin-top:13px; align-items:center; flex-wrap:wrap; }
+  button {
+    font:inherit; font-size:13px; padding:5px 12px; border-radius:4px;
+    border:1px solid var(--rule-2); background:#f4f4f1; color:var(--ink-2); cursor:pointer;
+  }
+  button:hover { background:#eceae5; }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600; }
+  button.primary:hover { filter:brightness(.94); }
+  button.danger { color:var(--bad); }
+  button:disabled { opacity:.5; cursor:default; }
+
+  .stat { font-size:12px; margin-top:9px; min-height:15px; line-height:1.5; }
+  .stat.ok { color:var(--ok); }
+  .stat.bad { color:var(--bad); }
+  .stat.busy { color:var(--ink-4); }
+  .size { font-size:12px; color:var(--ink-4); margin-left:auto; font-variant-numeric:tabular-nums; }
+
+  footer { margin-top:44px; font-size:13px; color:var(--ink-4); line-height:1.7; }
+  footer code { font-family:var(--mono); font-size:12px; }
+  .offline {
+    background:#fff4f2; border:1px solid #f0cdc7; color:var(--bad);
+    padding:14px 16px; border-radius:6px; font-size:15px; line-height:1.6; margin-bottom:24px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>이미지 넣기</h1>
+  <p>
+    각 칸에 사진을 <b>끌어다 놓거나</b> 칸을 눌러 파일을 고르면 됩니다. 파일명은 신경 쓰지
+    않아도 되고, 알아서 슬라이드가 찾는 이름으로 저장됩니다.
+  </p>
+  <p>
+    큰 사진은 브라우저에서 긴 변 2400px으로 줄여 올립니다. 원본 그대로 넣고 싶으면
+    각 칸의 <b>원본</b> 버튼을 쓰세요.
+  </p>
+  <div class="links">
+    <a href="index.html" target="_blank">덱 열기 →</a>
+  </div>
+</header>
+
+<hr>
+
+<div id="offline" class="offline" hidden></div>
+
+<div class="sect-h">
+  <h2>모아둔 이미지</h2>
+  <span class="n" id="poolN"></span>
+  <span class="act">
+    <button id="poolAdd">파일 추가</button>
+    <button id="poolReload">새로고침</button>
+  </span>
+</div>
+
+<div id="poolTray"><div class="none">읽는 중…</div></div>
+<div class="hint" id="hint"></div>
+
+<p style="font-size:13px;color:var(--ink-3);margin:10px 0 0;line-height:1.6;">
+  탐색기에서 <code style="font-family:var(--mono);font-size:12px;">assets/_pool/</code> 폴더에
+  통째로 복사해 넣어도 됩니다 — <b>새로고침</b>을 누르면 나타납니다.
+  여기 있는 사진은 슬라이드에 직접 쓰이지 않고, 아래 칸으로 끌어다 놓아야 배치됩니다.
+</p>
+
+<div class="sect-h" style="margin-top:40px;">
+  <h2>슬라이드 칸</h2>
+  <span class="n" id="counts">읽는 중…</span>
+</div>
+
+<div id="bulk" style="margin-bottom:16px;">
+  여기에 여러 장을 떨어뜨리면 — <b>파일명이 칸 이름과 같은 것</b>은 자동 배치되고,
+  나머지는 <b>모아둔 이미지</b>로 들어갑니다.
+</div>
+
+<div class="grid" id="grid"></div>
+
+<footer>
+  <hr>
+  저장된 파일은 <code>assets/</code> 에 들어갑니다. 교체하거나 지운 사진은 삭제되지 않고
+  <code>assets/_replaced/</code> 로 옮겨지니 되돌릴 수 있습니다.<br>
+  이 페이지는 <code>serve.py</code>가 켜져 있을 때만 저장할 수 있습니다
+  (<code>start-presentation.bat</code>으로 실행).
+</footer>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var MAX_EDGE = 2400;
+  var grid = document.getElementById('grid');
+  var counts = document.getElementById('counts');
+  var slots = [];
+  var pool = [];
+  var picked = null;   // a pool item armed by clicking, waiting for a slot
+  var flash = {};      // slot name -> message to re-apply after a re-render
+
+  function fmtBytes(b) {
+    if (b == null) return '';
+    return b > 1048576 ? (b / 1048576).toFixed(1) + ' MB'
+                       : Math.round(b / 1024) + ' KB';
+  }
+  function base(name) { return name.split('/').pop(); }
+
+  /* ---------- load ---------- */
+
+  function load() {
+    return fetch('/api/assets')
+      .then(function (r) {
+        var type = r.headers.get('content-type') || '';
+        // a static host answers with the 404 page, not JSON
+        if (!r.ok || type.indexOf('json') < 0) throw new Error('NO_SERVER');
+        return r.json();
+      })
+      .then(function (res) {
+        if (!res.ok) throw new Error(res.error || 'could not read the deck');
+        slots = res.slots;
+        render();
+      })
+      .catch(function (err) {
+        var box = document.getElementById('offline');
+        var noServer = err.message === 'NO_SERVER' || err instanceof TypeError ||
+                       /JSON|Unexpected token/i.test(err.message);
+        box.hidden = false;
+        box.innerHTML = noServer
+          ? '<b>이 페이지는 내 컴퓨터에서만 동작합니다.</b><br>' +
+            '사진을 저장하려면 <code>start-presentation.bat</code> 으로 띄운 뒤 ' +
+            '<code>localhost</code> 주소로 여세요. ' +
+            'GitHub Pages 같은 정적 호스팅에서는 저장할 곳이 없습니다.'
+          : '슬롯을 읽지 못했습니다 — <b>' + err.message + '</b>';
+        counts.textContent = '';
+        tray.innerHTML = '<div class="none">—</div>';
+        poolN.textContent = '';
+      });
+  }
+
+  function render() {
+    var filled = slots.filter(function (s) { return s.bytes != null; }).length;
+    counts.innerHTML = '<b>' + filled + '</b> / ' + slots.length + ' 칸 채워짐' +
+      (filled === slots.length ? ' — 전부 들어갔습니다.' : '');
+
+    grid.innerHTML = '';
+    slots.forEach(function (s) { grid.appendChild(card(s)); });
+
+    // a re-render rebuilds every card, so put any pending message back
+    Object.keys(flash).forEach(function (name) {
+      var i = slots.findIndex(function (s) { return s.name === name; });
+      if (i < 0) return;
+      var stat = grid.children[i].querySelector('.stat');
+      stat.className = 'stat ' + flash[name].kind;
+      stat.textContent = flash[name].text;
+    });
+  }
+
+  function card(s) {
+    var el = document.createElement('div');
+    el.className = 'card' + (s.bytes != null ? ' filled' : '');
+
+    var drop = document.createElement('div');
+    drop.className = 'drop';
+    if (s.bytes != null) {
+      var img = document.createElement('img');
+      img.src = s.name + '?v=' + s.mtime;
+      img.alt = '';
+      drop.appendChild(img);
+    } else {
+      drop.innerHTML = '<div class="empty"><span>+</span>여기에 사진을 끌어다 놓거나<br>눌러서 고르세요</div>';
+    }
+
+    var meta = document.createElement('div');
+    meta.className = 'meta';
+    meta.innerHTML =
+      '<div class="fname">' + base(s.name) + '</div>' +
+      '<div class="desc">' + (s.desc || '') + '</div>' +
+      '<div class="where">쓰이는 곳 · <b>슬라이드 ' + s.slides.join(', ') + '</b></div>';
+
+    var row = document.createElement('div');
+    row.className = 'row';
+
+    var pick = document.createElement('button');
+    pick.className = 'primary';
+    pick.textContent = s.bytes != null ? '바꾸기' : '파일 고르기';
+
+    var raw = document.createElement('button');
+    raw.textContent = '원본';
+    raw.title = '줄이지 않고 원본 그대로 올립니다';
+
+    row.appendChild(pick);
+    row.appendChild(raw);
+
+    if (s.bytes != null) {
+      var del = document.createElement('button');
+      del.className = 'danger';
+      del.textContent = '빼기';
+      del.onclick = function () { remove(s, stat); };
+      row.appendChild(del);
+
+      var size = document.createElement('span');
+      size.className = 'size';
+      size.textContent = s.format + ' · ' + fmtBytes(s.bytes);
+      row.appendChild(size);
+    }
+
+    var stat = document.createElement('div');
+    stat.className = 'stat';
+
+    meta.appendChild(row);
+    meta.appendChild(stat);
+    el.appendChild(drop);
+    el.appendChild(meta);
+
+    /* file picker */
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.hidden = true;
+    el.appendChild(input);
+
+    var keepOriginal = false;
+    pick.onclick = function () { keepOriginal = false; input.click(); };
+    raw.onclick  = function () { keepOriginal = true;  input.click(); };
+    drop.onclick = function () { keepOriginal = false; input.click(); };
+    input.onchange = function () {
+      if (input.files[0]) upload(s, input.files[0], keepOriginal, stat);
+      input.value = '';
+    };
+
+    /* drag and drop */
+    ['dragenter', 'dragover'].forEach(function (ev) {
+      el.addEventListener(ev, function (e) {
+        e.preventDefault(); e.stopPropagation(); el.classList.add('hot');
+      });
+    });
+    ['dragleave', 'drop'].forEach(function (ev) {
+      el.addEventListener(ev, function (e) {
+        e.preventDefault(); e.stopPropagation();
+        if (ev === 'dragleave' && el.contains(e.relatedTarget)) return;
+        el.classList.remove('hot');
+      });
+    });
+    el.addEventListener('drop', function (e) {
+      var fromPool = e.dataTransfer.getData('text/x-pool');
+      if (fromPool) { assign(s, fromPool, stat); return; }
+      var f = e.dataTransfer.files[0];
+      if (f) upload(s, f, false, stat);
+    });
+
+    // a pool item armed by clicking lands on the next slot clicked
+    el.addEventListener('click', function (e) {
+      if (!picked) return;
+      e.preventDefault(); e.stopPropagation();
+      assign(s, picked.filename, stat);
+    }, true);
+
+    return el;
+  }
+
+  /* ---------- resize in the browser, so no server-side deps ---------- */
+
+  function prepare(file, keepOriginal) {
+    if (keepOriginal) return readAsDataURL(file);
+
+    return new Promise(function (resolve) {
+      var url = URL.createObjectURL(file);
+      var im = new Image();
+      im.onload = function () {
+        var w = im.naturalWidth, h = im.naturalHeight;
+        var longest = Math.max(w, h);
+        // small enough already — send the bytes untouched, no re-encode
+        if (longest <= MAX_EDGE && file.size <= 2 * 1024 * 1024) {
+          URL.revokeObjectURL(url);
+          resolve(readAsDataURL(file));
+          return;
+        }
+        var k = Math.min(1, MAX_EDGE / longest);
+        var c = document.createElement('canvas');
+        c.width = Math.round(w * k);
+        c.height = Math.round(h * k);
+        c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url);
+        resolve(c.toDataURL('image/jpeg', 0.92));
+      };
+      im.onerror = function () {
+        URL.revokeObjectURL(url);
+        resolve(readAsDataURL(file));   // let the server judge the format
+      };
+      im.src = url;
+    });
+  }
+
+  function readAsDataURL(file) {
+    return new Promise(function (resolve, reject) {
+      var fr = new FileReader();
+      fr.onload = function () { resolve(fr.result); };
+      fr.onerror = function () { reject(new Error('could not read the file')); };
+      fr.readAsDataURL(file);
+    });
+  }
+
+  /* ---------- upload ---------- */
+
+  function setFlash(name, kind, text, keep) {
+    flash[name] = { kind: kind, text: text };
+    if (!keep) {
+      setTimeout(function () {
+        if (flash[name] && flash[name].text === text) { delete flash[name]; render(); }
+      }, 6000);
+    }
+  }
+
+  function upload(slot, file, keepOriginal, stat) {
+    stat.className = 'stat busy';
+    stat.textContent = '올리는 중…';
+
+    Promise.resolve(prepare(file, keepOriginal))
+      .then(function (dataUrl) { return dataUrl; })
+      .then(function (dataUrl) {
+        return fetch('/api/assets', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: slot.name, dataUrl: dataUrl })
+        });
+      })
+      .then(function (r) {
+        return r.json().catch(function () { return { ok: false, error: 'HTTP ' + r.status }; });
+      })
+      .then(function (res) {
+        if (!res.ok) throw new Error(res.error);
+        setFlash(slot.name, 'ok', '저장됨 · ' + res.format + ' · ' + fmtBytes(res.bytes) +
+          (res.replaced ? ' · 이전 파일은 _replaced/ 에 보관' : ''));
+        return load();
+      })
+      .catch(function (err) {
+        setFlash(slot.name, 'bad', '실패 — ' + err.message, true);
+        render();
+      });
+  }
+
+  function remove(slot, stat) {
+    stat.className = 'stat busy';
+    stat.textContent = '빼는 중…';
+    fetch('/api/assets/remove', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: slot.name })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (!res.ok) throw new Error(res.error);
+        setFlash(slot.name, 'ok', '뺐습니다 · _replaced/ 에 보관됨');
+        return load();
+      })
+      .catch(function (err) {
+        setFlash(slot.name, 'bad', '실패 — ' + err.message, true);
+        render();
+      });
+  }
+
+  /* ---------- the pool ---------- */
+
+  function loadPool() {
+    return fetch('/api/pool')
+      .then(function (r) { return r.json(); })
+      .then(function (res) { if (res.ok) { pool = res.pool; renderPool(); } })
+      .catch(function () {});
+  }
+
+  var tray = document.getElementById('poolTray');
+  var poolN = document.getElementById('poolN');
+  var hint = document.getElementById('hint');
+
+  function setHint(text) {
+    hint.textContent = text || '';
+    hint.classList.toggle('on', !!text);
+    document.body.classList.toggle('picking', !!picked);
+  }
+
+  function renderPool() {
+    poolN.textContent = pool.length ? pool.length + '장' : '';
+    tray.innerHTML = '';
+    if (!pool.length) {
+      tray.innerHTML = '<div class="none">비어 있습니다.<br>' +
+        '사진을 여기에 끌어다 놓거나 <b>파일 추가</b>를 누르세요.</div>';
+      return;
+    }
+    pool.forEach(function (it) {
+      var d = document.createElement('div');
+      d.className = 'pit' + (it.format ? '' : ' bad') +
+                    (picked && picked.filename === it.filename ? ' sel' : '');
+      d.draggable = !!it.format;
+
+      var im = document.createElement('img');
+      im.src = it.url + '?v=' + it.mtime;
+      im.alt = it.filename;
+      d.appendChild(im);
+
+      var fn = document.createElement('div');
+      fn.className = 'fn';
+      fn.textContent = it.filename;
+      d.appendChild(fn);
+
+      if (!it.format) {
+        var w = document.createElement('div');
+        w.className = 'warn';
+        w.textContent = '표시 불가 — JPEG로 변환 필요';
+        d.appendChild(w);
+      }
+
+      var x = document.createElement('div');
+      x.className = 'x';
+      x.textContent = '×';
+      x.title = '_replaced/ 로 옮기기';
+      x.onclick = function (e) {
+        e.stopPropagation();
+        fetch('/api/pool/remove', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename: it.filename })
+        }).then(loadPool);
+      };
+      d.appendChild(x);
+
+      if (it.format) {
+        d.onclick = function () {
+          picked = (picked && picked.filename === it.filename) ? null : it;
+          setHint(picked ? '“' + picked.filename + '” 선택됨 — 넣을 칸을 누르세요. (Esc 취소)' : '');
+          renderPool();
+        };
+        d.addEventListener('dragstart', function (e) {
+          e.dataTransfer.setData('text/x-pool', it.filename);
+          e.dataTransfer.setData('text/plain', it.filename);
+          e.dataTransfer.effectAllowed = 'copy';
+        });
+      }
+      tray.appendChild(d);
+    });
+  }
+
+  function assign(slot, filename, stat) {
+    stat.className = 'stat busy';
+    stat.textContent = '배치하는 중…';
+    return fetch('/api/assets/from-pool', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: slot.name, pool: filename })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (!res.ok) throw new Error(res.error);
+        setFlash(slot.name, 'ok', filename + ' 배치됨 · ' + fmtBytes(res.bytes) +
+          (res.replaced ? ' · 이전 파일은 _replaced/ 에 보관' : ''));
+        picked = null; setHint('');
+        return load().then(renderPool);
+      })
+      .catch(function (err) {
+        setFlash(slot.name, 'bad', '실패 — ' + err.message, true);
+        render();
+      });
+  }
+
+  document.getElementById('poolReload').onclick = loadPool;
+
+  var poolInput = document.createElement('input');
+  poolInput.type = 'file'; poolInput.accept = 'image/*'; poolInput.multiple = true; poolInput.hidden = true;
+  document.body.appendChild(poolInput);
+  document.getElementById('poolAdd').onclick = function () { poolInput.click(); };
+  poolInput.onchange = function () {
+    toPool([].slice.call(poolInput.files)).then(function () { poolInput.value = ''; });
+  };
+
+  function toPool(files) {
+    var chain = Promise.resolve();
+    files.forEach(function (f) {
+      chain = chain.then(function () {
+        return readAsDataURL(f).then(function (dataUrl) {
+          return fetch('/api/pool', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filename: f.name, dataUrl: dataUrl })
+          });
+        });
+      });
+    });
+    return chain.then(loadPool);
+  }
+
+  ['dragenter', 'dragover'].forEach(function (ev) {
+    tray.addEventListener(ev, function (e) { e.preventDefault(); tray.classList.add('hot'); });
+  });
+  ['dragleave', 'drop'].forEach(function (ev) {
+    tray.addEventListener(ev, function (e) { e.preventDefault(); tray.classList.remove('hot'); });
+  });
+  tray.addEventListener('drop', function (e) {
+    var files = [].slice.call(e.dataTransfer.files);
+    if (files.length) toPool(files);
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && picked) { picked = null; setHint(''); renderPool(); }
+  });
+
+  /* ---------- bulk drop: match by filename ---------- */
+
+  var bulk = document.getElementById('bulk');
+  var bulkInput = document.createElement('input');
+  bulkInput.type = 'file'; bulkInput.accept = 'image/*'; bulkInput.multiple = true; bulkInput.hidden = true;
+  document.body.appendChild(bulkInput);
+  bulk.onclick = function () { bulkInput.click(); };
+  bulkInput.onchange = function () { takeMany([].slice.call(bulkInput.files)); bulkInput.value = ''; };
+
+  ['dragenter', 'dragover'].forEach(function (ev) {
+    bulk.addEventListener(ev, function (e) { e.preventDefault(); bulk.classList.add('hot'); });
+  });
+  ['dragleave', 'drop'].forEach(function (ev) {
+    bulk.addEventListener(ev, function (e) { e.preventDefault(); bulk.classList.remove('hot'); });
+  });
+  bulk.addEventListener('drop', function (e) { takeMany([].slice.call(e.dataTransfer.files)); });
+
+  function takeMany(files) {
+    var matched = 0, skipped = [];
+    var chain = Promise.resolve();
+    files.forEach(function (f) {
+      var hit = slots.filter(function (s) {
+        return base(s.name).toLowerCase() === f.name.toLowerCase();
+      })[0];
+      if (!hit) { skipped.push(f.name); return; }
+      matched++;
+      chain = chain.then(function () {
+        return prepare(f, false).then(function (dataUrl) {
+          return fetch('/api/assets', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: hit.name, dataUrl: dataUrl })
+          });
+        });
+      });
+    });
+    var leftovers = files.filter(function (f) {
+      return skipped.indexOf(f.name) >= 0;
+    });
+
+    bulk.textContent = '처리하는 중…';
+    chain
+      .then(function () { return leftovers.length ? toPool(leftovers) : null; })
+      .then(load)
+      .then(function () {
+        var parts = [];
+        if (matched) parts.push('<b>' + matched + '장 칸에 배치</b>');
+        if (leftovers.length) parts.push('<b>' + leftovers.length + '장은 모아둔 이미지로</b>');
+        bulk.innerHTML = parts.length
+          ? parts.join(' · ') + ' — 모아둔 이미지에서 끌어다 칸에 넣으세요.'
+          : '넣을 파일이 없습니다.';
+      });
+  }
+
+  /* whole-window drop should not navigate away */
+  ['dragover', 'drop'].forEach(function (ev) {
+    window.addEventListener(ev, function (e) { e.preventDefault(); });
+  });
+
+  load().then(loadPool);
+})();
+</script>
+</body>
+</html>

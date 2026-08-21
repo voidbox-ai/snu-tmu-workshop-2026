@@ -1,0 +1,25 @@
+{
+  "name": "presence-before-synchronization",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "description": "Presence Before Synchronization — SNU x TMU Annual Workshop 2026 (React + TypeScript deck)",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --port 8000",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^6.1.0",
+    "typescript": "^5.9.3",
+    "vite": "^8.2.2"
+  }
+}
