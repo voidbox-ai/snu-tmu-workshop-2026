@@ -8,13 +8,29 @@ export const meta: SlideMeta = {
   sub: 'five days, one department, one graduating class',
 }
 
-/* The failure numbers deliberately carry no accent: the deck's one color is
-   reserved for the side that survived. Color on both would blur the point. */
+/* Left column is the hall, right column is online — the same two sides as the
+   two directions on slide 7, held in the same position down the slide.
+   Nothing here carries the accent: the deck's one color belongs to what
+   survived, and none of these numbers did. */
 export default function WhatTheLayerDid() {
   return (
     <>
-      <Stats>
-        <Stat value="9">comments</Stat>
+      <Stats pair>
+        <Stat value="uncountable" word>
+          comments
+          <br />
+          <b>offline, in the hall</b>
+        </Stat>
+        <Stat value="9">
+          comments
+          <br />
+          <b>online</b>
+        </Stat>
+      </Stats>
+
+      <Rule style={{ margin: '34px 0' }} />
+
+      <Stats pair>
         <Stat value="2">
           syncs
           <br />
@@ -26,8 +42,12 @@ export default function WhatTheLayerDid() {
           <b>virtual → physical</b>
         </Stat>
       </Stats>
-      <Rule style={{ marginTop: 38 }} />
-      <Text>Eleven interactions in total.</Text>
+
+      <Rule style={{ marginTop: 34 }} />
+      <Text>
+        Eleven interactions in total on the layer we built. For the paper guestbook in the hall we
+        have no number at all.
+      </Text>
     </>
   )
 }

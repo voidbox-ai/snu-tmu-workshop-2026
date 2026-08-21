@@ -148,11 +148,21 @@ hr.rule { border: 0; height: 1px; background: var(--rule); margin: 24px 0; width
 .stats { display: flex; gap: 56px; align-items: flex-start; }
 .stats.wide { gap: 82px; }
 .stat { flex: 0 0 auto; }
+
+/* `pair` — two fixed columns, so several rows of figures line up under each
+   other. On slide 9 the left column is the hall and the right one is online,
+   and holding that position down the slide is the whole argument. */
+.stats.pair { gap: 0; }
+.stats.pair .stat { flex: 0 0 46%; }
 .stat .v {
   font-size: 76px; font-weight: 800; line-height: 1;
   letter-spacing: -0.035em; font-variant-numeric: tabular-nums; color: var(--ink);
 }
 .stat .v.sm { font-size: 58px; }
+/* A count we do not have. Set as a word rather than at numeral size: there is
+   no number here, and a number-sized word would pretend there was. The box
+   still matches a numeral's, so the labels beneath stay on one line. */
+.stat .v.word { font-size: 38px; line-height: 76px; letter-spacing: -0.02em; color: var(--ink-2); }
 .stat.on .v { color: var(--accent); }
 .stat .k {
   font-size: 16px; color: var(--ink-3); margin-top: 14px;

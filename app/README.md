@@ -1,6 +1,6 @@
 # Presence Before Synchronization — React + TypeScript
 
-SNU × TMU Annual Workshop · 19 슬라이드 + 백업 4장 · 14:05 계획 · reveal.js 5.1.0
+SNU × TMU Annual Workshop · 19 슬라이드 + 백업 4장 · 15:25 계획 · reveal.js 5.1.0
 
 발표 엔진은 **그대로 reveal.js**입니다. 바뀐 것은 슬라이드를 담는 방식뿐입니다 —
 44KB짜리 `index.html` 하나였던 것이 슬라이드 한 장에 파일 한 쌍으로 갈라졌습니다.
@@ -167,7 +167,7 @@ dev 서버를 띄운 뒤 **<http://localhost:8000/images.html>** 을 엽니다. 
 페이스 표시줄 읽는 법:
 
 ```
-04:12   +0:18 behind   Findings · 14/19 · plan 14:05
+04:12   +0:18 behind   Findings · 14/19 · plan 15:25
 ```
 
 경과 시간 / 이 슬라이드에 도착했어야 할 시각 대비 지연 (초록 = 여유, 빨강 = 20초 이상 지연) /
@@ -179,7 +179,7 @@ dev 서버를 띄운 뒤 **<http://localhost:8000/images.html>** 을 엽니다. 
 
 | 구간 | 상단에 표시되는 문장 | 슬라이드 | 시간 |
 |---|---|---|---|
-| Background | Background | 1–4 | 2:00 |
+| Background | Background | 1–4 | 3:20 |
 | Yonsei | Case 1 — one exhibition, run in two places at once | 5–8 | 3:00 |
 | Findings | What failed, what survived, and what we take from it | 9–14 | 5:45 |
 | Munsan | Case 2 — the same scan, a different user | 15–18 | 2:45 |

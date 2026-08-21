@@ -3,7 +3,7 @@
 **Rethinking Digital Twins for Community Rebuilding**
 Hyeogjin Noh · [voidbox](https://nubim.voidbox.ai) · SNU × TMU Annual Workshop, 2026
 
-A 14-minute talk reporting on two projects: a graduation exhibition run
+A 15-minute talk reporting on two projects: a graduation exhibition run
 simultaneously in a physical hall and in a 3D Gaussian Splatting scan of that
 hall, and a rural school being remodeled where the same scan became a design
 instrument instead of an exhibit.

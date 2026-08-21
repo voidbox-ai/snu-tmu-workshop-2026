@@ -149,10 +149,15 @@ export function List({ children, style }: Kids) {
   )
 }
 
-/** A row of big numbers. */
-export function Stats({ children, style }: Kids & { wide?: boolean }) {
+/**
+ * A row of big numbers.
+ *
+ * `pair` fixes two columns instead of packing the tiles, so several rows line
+ * up under each other and each column can stand for one side of a comparison.
+ */
+export function Stats({ children, style, pair }: Kids & { pair?: boolean }) {
   return (
-    <div className="stats wide" style={style}>
+    <div className={cx('stats', pair ? 'pair' : 'wide')} style={style}>
       {children}
     </div>
   )
@@ -166,16 +171,19 @@ export function Stat({
   value,
   on,
   small,
+  word,
   children,
 }: {
   value: ReactNode
   on?: boolean
   small?: boolean
+  /** The figure is a word, not a number — set it smaller so it does not pose as one. */
+  word?: boolean
   children?: ReactNode
 }) {
   return (
     <div className={cx('stat', on && 'on')}>
-      <div className={cx('v', small && 'sm')}>{value}</div>
+      <div className={cx('v', small && 'sm', word && 'word')}>{value}</div>
       <div className="k">{children}</div>
     </div>
   )
