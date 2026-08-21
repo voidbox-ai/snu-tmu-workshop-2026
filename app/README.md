@@ -18,12 +18,16 @@ src/slides/09-what-the-layer-did.notes.html   ← 이 슬라이드의 대본
 
 ## 실행
 
-### 발표용 — `start-presentation.bat` 더블클릭
+### 발표용 — cmd 에서
 
-Node.js가 없으면 알려주고, 처음이면 의존성을 설치한 뒤 <http://localhost:8000/> 을 띄웁니다.
-**발표자 화면(S)과 대본 편집을 쓰려면 이 방법으로 실행하세요.**
+```
+cd /d D:\voidbox-snu-tmu-workshop\app
+npm install     :: 첫 실행 한 번만 (인터넷 필요)
+npm run dev
+```
 
-터미널이 편하면 `npm install` 후 `npm run dev` 도 같습니다.
+<http://localhost:8000/> 이 열립니다. **발표자 화면(S)과 대본 편집을 쓰려면
+이 방법으로 실행하세요.** 멈출 때는 `Ctrl+C`.
 
 ### 발표 당일 안전망 — 미리 빌드해두기
 
@@ -157,21 +161,63 @@ dev 서버를 띄운 뒤 **<http://localhost:8000/images.html>** 을 엽니다. 
 ## 파일
 
 ```
-src/slides/NN-*.tsx           슬라이드 한 장
-src/slides/NN-*.notes.html    그 슬라이드의 대본
-src/slides/registry.ts        파일명으로 순서·시간표를 자동 구성
-src/deck.config.ts            구간 문장, 무대 크기
-src/components/layout.tsx     Split · Duo · Stats · Pull 등 레이아웃 조각
-src/components/diagrams/      슬라이드 3·8·12의 SVG 도해
-src/components/SlideSection   상단 인덱스 바 + 제목 + 본문 래퍼 + 노트 블록
-src/hooks/                    reveal 초기화 · 페이스 시계 · 노트 · 발표자 화면 감지
-src/styles/deck.css           테마 (원본 그대로)
-server/deck-api.ts            dev 전용 API — 대본 저장, 이미지 넣기 (구 serve.py)
-public/reveal/                reveal.js 5.1.0 (오프라인 동봉, 발표자 화면 패치본)
-public/assets/                이미지 — 여기에 들어갑니다
-public/images.html            이미지 넣기 페이지
-src/assets/fonts/             Pretendard Variable (동봉 — 설치 불필요)
-.backups/                     대본 저장 시마다 자동 생성 (git 제외)
+app/
+├── index.html                  Vite 진입점 — reveal.js / notes.js 를 <script> 로 로드
+├── vite.config.ts              base './' (어느 경로에 올려도 동작) + dev API 플러그인
+├── tsconfig.json
+├── package.json                npm run dev / build / preview / typecheck
+│
+├── src/
+│   ├── main.tsx                React 마운트
+│   ├── App.tsx                 슬라이드 목록 렌더 + 발표자 UI 상태
+│   ├── deck.config.ts          구간 문장(SECTION_LABELS), 무대 크기 1600×900
+│   ├── types.ts                SlideMeta — 슬라이드가 자기 자신에 대해 선언하는 것
+│   ├── reveal.d.ts             벤더링된 reveal.js 타입 선언
+│   │
+│   ├── slides/                 ★ 슬라이드 한 장 = 파일 한 쌍
+│   │   ├── registry.ts                      파일명으로 순서·시간표를 자동 구성
+│   │   ├── 01-title.tsx                     화면
+│   │   ├── 01-title.notes.html              대본
+│   │   ├── 02-what-we-do.tsx  ·  .notes.html
+│   │   ├── …                                (03 – 20, 같은 규칙)
+│   │   ├── 21-backup-husserl.*              ┐
+│   │   ├── 22-backup-borges.*               ├ 백업 (번호·타이머에서 제외)
+│   │   └── 23-backup-archive-repertoire.*   ┘
+│   │
+│   ├── components/
+│   │   ├── SlideSection.tsx    상단 인덱스 바 + 제목 + 본문 래퍼 + 노트 블록
+│   │   ├── layout.tsx          Split · Duo · Strip · Stats · Lessons · Pull · List …
+│   │   ├── ImageSlot.tsx       도판 — 파일이 없으면 점선 자리표시자로 대체
+│   │   ├── PaceBar.tsx         왼쪽 아래 페이스 표시줄 (T)
+│   │   ├── NotesOverlay.tsx    화면 내 노트 패널 (I)
+│   │   ├── HelpBar.tsx         단축키 바 (?)
+│   │   └── diagrams/
+│   │       ├── PipelineDiagram.tsx   슬라이드 3 — 3DGS 파이프라인
+│   │       ├── CouplingDiagram.tsx   슬라이드 8 — 메타버스 / 디지털 트윈 / Space Sync
+│   │       └── TimelineDiagram.tsx   슬라이드 12 — 오늘 날짜로 계산되는 타임라인
+│   │
+│   ├── hooks/
+│   │   ├── useReveal.ts        reveal 초기화 · 키 바인딩 · 현재 슬라이드 · 타이머 시작
+│   │   ├── useLiveNotes.ts     발표자 화면에서 저장한 대본을 새로고침 없이 반영
+│   │   └── useSpeakerView.ts   발표자 화면 연결 감지 (하트비트)
+│   │
+│   ├── styles/deck.css         테마 (원본 그대로)
+│   └── assets/fonts/           Pretendard Variable (동봉 — 설치 불필요)
+│
+├── server/
+│   └── deck-api.ts             dev 전용 API — 구 serve.py
+│                               /api/notes · /api/assets · /api/pool
+│
+├── public/                     빌드할 때 그대로 복사되는 것들
+│   ├── reveal/                 reveal.js 5.1.0 (오프라인 동봉, 발표자 화면 패치본)
+│   ├── assets/                 ★ 이미지가 들어가는 곳
+│   │   ├── _pool/              아직 어느 칸에 넣을지 안 정한 사진
+│   │   └── _replaced/          교체·삭제된 사진 보관 (자동 · git 제외)
+│   └── images.html             이미지 넣기 페이지
+│
+├── .backups/                   대본 저장 시마다 자동 생성 (git 제외)
+├── dist/                       빌드 결과 (git 제외)
+└── node_modules/               (git 제외)
 ```
 
 > reveal.js는 발표자 화면 HTML을 `notes.js` 안에 문자열로 품고 있습니다.

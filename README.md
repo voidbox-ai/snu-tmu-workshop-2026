@@ -19,11 +19,23 @@ The physical exhibition lived five days; the virtual one is still open.
 
 ## Contents
 
-| | |
-|---|---|
-| [`app/`](app/) | **The talk.** reveal.js driven from React + TypeScript, one file per slide |
-| [`deck/`](deck/) | The original single-file reveal.js deck, kept frozen as a fallback |
-| [`presence-before-sync-script.md`](presence-before-sync-script.md) | Reading copy of the script |
+```
+snu-tmu-workshop-2026/
+├── app/                            ★ the talk — reveal.js driven from React + TypeScript
+│   ├── src/slides/                 one slide = one .tsx + one .notes.html
+│   ├── src/components/             layout pieces, SVG diagrams, presenter chrome
+│   ├── src/hooks/                  reveal boot · pacing clock · notes · speaker view
+│   ├── src/styles/deck.css         the theme, unchanged from the original deck
+│   ├── server/deck-api.ts          dev-only API: note saving, image drop-in
+│   └── public/                     reveal.js 5.1.0, the pictures, images.html
+├── deck/                           the original single-file deck, frozen as a fallback
+├── .github/workflows/deploy.yml    push → build → GitHub Pages
+├── index.html                      signpost for anyone opening the repository folder
+├── presence-before-sync-script.md  reading copy of the script
+└── README.md                       this file
+```
+
+[`app/README.md`](app/README.md) breaks `app/` down file by file.
 
 ## Running the deck
 
@@ -34,7 +46,7 @@ network is the first `npm install` — **do that the day before, not at the venu
 ```
 cd app
 npm install          # first time only
-npm run dev          # or double-click start-presentation.bat on Windows
+npm run dev          # http://localhost:8000/ — Ctrl+C to stop
 ```
 
 Then `S` for the speaker view, `T` for the pacing clock, `I` for notes on the
@@ -89,7 +101,8 @@ app/src/slides/09-what-the-layer-did.tsx          ← 화면
 app/src/slides/09-what-the-layer-did.notes.html   ← 대본
 ```
 
-- 실행: `app/start-presentation.bat` 더블클릭 (Node.js 필요, 첫 실행은 인터넷 필요)
+- 실행: cmd 에서 `cd /d D:\voidbox-snu-tmu-workshop\app` → `npm run dev`
+  (Node.js 필요 · 첫 실행 전에 `npm install` 한 번, 그때만 인터넷 필요)
 - 단축키: `S` 발표자 화면 · `T` 타이머 · `I` 노트 · `B` 블랙아웃 · `?` 도움말
 - 대본은 발표자 화면에서 직접 고치고 저장할 수 있습니다 (해당 슬라이드 파일에 기록됨)
 - 이미지는 <http://localhost:8000/images.html> 에서 끌어다 놓으면 됩니다
